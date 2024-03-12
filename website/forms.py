@@ -8,6 +8,6 @@ class VideoForm(forms.ModelForm):
         fields = ['title', 'video_file']
         widgets = {
             "title": forms.TextInput(attrs={
-                "placeholder": "Give your image a title in order to find it later..."
+                "placeholder": "Give your video a name in order to find it later..."
             })
         }
