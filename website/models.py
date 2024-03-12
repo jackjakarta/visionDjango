@@ -17,7 +17,7 @@ class Video(CustomModel):
 
 
 class Narration(CustomModel):
-    text = models.TextField()
+    text = models.TextField(null=True)
     user = models.ForeignKey(
         AuthUser,
         on_delete=models.CASCADE,

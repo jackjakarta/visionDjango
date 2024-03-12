@@ -1,6 +1,8 @@
-from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect
+
+from users.forms import RegisterForm
 
 
 def login_user(request):
@@ -28,3 +30,18 @@ def logout_user(request):
     logout(request)
     messages.success(request, "You've been logged out.")
     return redirect("website:home")
+
+
+def register_view(request):
+    if request.method == "GET":
+        form = RegisterForm()
+    else:
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "You have registered successfully!")
+            return redirect("website:vision")
+
+    return render(request, "users/register.html", {
+        "form": form
+    })

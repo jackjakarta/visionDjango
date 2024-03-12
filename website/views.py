@@ -1,7 +1,3 @@
-import os
-
-from django.conf import settings
-from django.http import Http404
 from django.shortcuts import render, redirect
 from .forms import VideoForm
 from .vision.video import VideoAnalyser
@@ -19,23 +15,24 @@ def vision_view(request):
             form = VideoForm(request.POST, request.FILES)
             if form.is_valid():
                 video = form.save()
-                video_path = os.path.join(settings.MEDIA_ROOT, str(video.video_file))
+                video_path = video.video_file.url
 
-                # Process the uploaded video
-                analyser = VideoAnalyser(video_path)
+                # Process video
+                analyser = VideoAnalyser(video=video_path, custom_prompt=request.POST.get("prompt"))
                 analyser.read_frames()
                 narration = analyser.generate_narration()
 
                 # Save Narration to DB
-                Narration.objects.create(
-                    text=narration,
-                    user=request.user,
-                    video=video
-                )
+                if narration is not None:
+                    Narration.objects.create(
+                        text=narration,
+                        user=request.user,
+                        video=video
+                    )
 
-                return render(request, "website/vision_results.html", {
-                    "narration": narration,
-                })
+                    return render(request, "website/vision_results.html", {
+                        "narration": narration,
+                    })
         else:
             form = VideoForm()
 

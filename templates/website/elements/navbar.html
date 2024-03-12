@@ -22,7 +22,8 @@
                   </ul>
                 </div>
           {% else %}
-        <a class="btn btn-default rounded-3" href="#">Sign Up</a>
+          <a class="btn btn-default rounded-3 me-2" href="{% url 'website:vision' %}">Login</a>
+        <a class="btn btn-default rounded-3" href="{% url 'users:register' %}">Sign Up</a>
           {% endif %}
       </div>
     </div>

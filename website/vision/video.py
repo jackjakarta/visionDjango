@@ -11,11 +11,12 @@ OPENAI_API_KEY = config("OPENAI_API_KEY")
 
 
 class VideoAnalyser:
-    def __init__(self, video: str):
+    def __init__(self, video: str, custom_prompt: str = None):
         self.client = OpenAI(api_key=OPENAI_API_KEY)
         self.video = cv2.VideoCapture(video)
         self.base64frames = None
         self.generated_text = None
+        self.custom_prompt = custom_prompt
 
     def read_frames(self):
         if not self.video.isOpened():
@@ -48,7 +49,8 @@ class VideoAnalyser:
                     "voice-over along with the video. Please only give me the narration in plain text without any "
                     "other instructions. Make sure that the text you generate fits and does not exceed the length of "
                     f"the video when spoken at a slow pace. The video is {len(self.base64frames)} frames long playing "
-                    "at 30 fps.\n",
+                    "at 30 fps. Here are some custom indications (if none provided ignore the custom instructions):\n\n"
+                    f"{self.custom_prompt}\n",
                     *map(lambda x: {"image": x, "resize": 768}, self.base64frames[0::50]),
                 ],
             },

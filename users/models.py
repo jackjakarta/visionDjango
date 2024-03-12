@@ -29,7 +29,14 @@ class Profile(CustomModel):
     user = models.OneToOneField(AuthUser, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to="avatars/", default=None, blank=True)
     city = models.CharField("City", max_length=120, blank=True)
-    country = models.CharField("Country", choices=COUNTRY_CHOICES, max_length=120, default=None, blank=True)
+    country = models.CharField(
+        verbose_name="Country",
+        choices=COUNTRY_CHOICES,
+        max_length=120,
+        default=None,
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return str(self.user)

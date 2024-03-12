@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'users',
     'website',
+    'storages',
 ]
 
 SITE_ID = 1
@@ -164,6 +165,29 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 CRISPY_ALLOWED_TEMPLATE_PACK = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+
+# S3 Storage Settings
+
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_ENDPOINT_URL = config('AWS_S3_ENDPOINT_URL')
+AWS_S3_FILE_OVERWRITE = False
+
+STORAGES = {
+
+    # Media files management
+    'default': {
+        'BACKEND': 'storages.backends.s3boto3.S3StaticStorage',
+    },
+
+    # CSS and JS files management
+    'staticfiles': {
+        'BACKEND': 'storages.backends.s3boto3.S3StaticStorage',
+    },
+}
 
 
 # Custom User Model

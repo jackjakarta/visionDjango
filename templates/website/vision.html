@@ -16,13 +16,29 @@ Vision
 
 <div class="container mt-7">
     <div class="form-container">
-        <h2 class="text-center" style="color: #E2E2E2">Upload a file</h2>
+        <h2 class="text-center" style="color: #E2E2E2">Video Narration</h2>
         <form id="myForm" class="form" action="" method="POST" enctype="multipart/form-data">
             <div class="form-group">
             {% csrf_token %}
             {{ form | crispy }}
+
+            <!--Switch-->
+                <p style="color: #E2E2E2;">Use the switch below to enable custom instructions</p>
+            <div class="form-check form-switch mb-3">
+<!--                <label class="form-check-label" for="switchCheckDefault">Custom Prompt</label>-->
+                <input class="form-check-input" style="width: 7%;" type="checkbox" role="switch" id="switchCheckDefault"/>
             </div>
-                <button type="submit" id="submitBtn" onclick="showLoadingScreen()" class="btn btn-light btn-lg rounded-3">Generate Narration</button>
+
+
+            <!-- Hidden Text Field Initially -->
+            <div class="mb-3" id="promptField" style="display: none;">
+                <label for="prompt" class="form-label">Custom Instructions</label>
+                <textarea class="form-control" id="prompt" name="prompt" placeholder="Make it in the style of morgan freeman..."></textarea>
+            </div>
+
+            </div>
+            <button type="submit" id="submitBtn" onclick="showLoadingScreen()" class="btn btn-light btn-lg rounded-3">Generate Narration</button>
+
             <div class="text-center">
             <div id="loading-container" style="display: none;">
                 <div id="spinner-container">
@@ -79,11 +95,17 @@ document.getElementById('myForm').addEventListener('submit', function(e) {
     // Disable the submit button to prevent multiple submissions
     const submitBtn = document.getElementById('submitBtn');
     submitBtn.style.display = 'none';
-
-    // If you're using AJAX for form submission, remember to re-enable the
-    // button and hide the spinner in your AJAX callback upon completion.
-    // For traditional form submissions, the page will reload, so manual
-    // re-enabling in JavaScript isn't necessary.
 });
+</script>
+<script>
+    $(document).ready(function(){
+        $('#switchCheckDefault').change(function(){
+            if(this.checked) {
+                $('#promptField').show();
+            } else {
+                $('#promptField').hide();
+            }
+        });
+    });
 </script>
 {% endblock %}
