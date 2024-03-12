@@ -39,7 +39,7 @@ def vision_view(request):
         else:
             form = VideoForm()
 
-        return render(request, "website/vision_results.html", {
+        return render(request, "website/vision.html", {
             'form': form,
         })
     else:
