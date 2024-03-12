@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+Vision Result
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'website/css/save-button.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container mt-4">
+  <div class="form-container">
+      <h2 class="text-center mb-4" style="color: #E2E2E2;">Narration for your video</h2>
+    <div id="text-container"></div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const text = "{% if narration %}{{ narration|safe }}{% else %}No narration generated.{% endif %}";
+    let i = 0;
+    const container = document.getElementById('text-container');
+
+    function displayLetter() {
+        if (i < text.length) {
+            container.innerHTML += text.charAt(i); // Add the next letter
+            i++;
+            setTimeout(displayLetter, 20 + Math.random() * 40); // Randomize time
+        }
+    }
+
+    displayLetter(); // Start the animation
+});
+</script>
+{% endblock %}
