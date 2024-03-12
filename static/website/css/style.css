@@ -123,3 +123,49 @@ body {
 #text-container {
     font-size: 16px;
 }
+
+.btn-default:hover,
+.open .dropdown-toggle.btn-default {
+    background-color: var(--ds-background-accent-magenta-subtlest);
+    color: #E2E2E2;
+    transition: background-color 0.3s ease;
+}
+
+.btn-default:active,
+.open .dropdown-toggle.btn-default {
+    background-color: var(--ds-background-accent-magenta-subtlest);
+    color: #E2E2E2;
+    transition: background-color 0.3s ease;
+}
+
+.btn-default.active {
+    background-color: var(--ds-background-accent-magenta-subtlest);
+    color: #E2E2E2;
+    transition: background-color 0.3s ease;
+}
+
+.btn-default:focus {
+    background-color: var(--ds-background-accent-magenta-subtlest);
+    color: #E2E2E2;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-menu a {
+    color: #E2E2E2;
+}
+
+.dropdown-menu a:active {
+    background-color: var(--ds-background-accent-magenta-subtlest);
+    color: #E2E2E2;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: var(--ds-background-accent-magenta-subtlest);
+    color: #E2E2E2;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-menu:focus {
+    color: #E2E2E2;
+}

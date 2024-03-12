@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Vision Result
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'website/css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="form-container">
+    <h2 class="text-center mb-4" style="color: #E2E2E2;">User Profile</h2>
+    <div class="row">
+      {% if narrations %}
+        {% for narration in narrations %}
+        <div class="col-md-4">
+          <div class="card mt-4">
+            <div class="card-image-container">
+              <video width="640" height="360" controls>
+                <source src="{{ narration.video.video_file.url }}" type="video/mp4">
+<!--                    <source src="#" type="video/mp4">-->
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <p class="card-title">{{ narration.video.title }}</p>
+            <p class="card-des">
+              {{ narration.text }}
+            </p>
+            <div class="card-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 384 512" stroke-width="0" fill="currentColor" stroke="currentColor">
+                <path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"></path>
+              </svg>
+              <span class="card-btn-text">Speech File</span>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

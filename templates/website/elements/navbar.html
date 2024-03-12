@@ -16,7 +16,7 @@
                    data-bs-toggle="dropdown" aria-expanded="false">{{ user }}</button>
                   <ul class="dropdown-menu">
                     <li>
-                      <a class="dropdown-item" href="#">My Videos</a>
+                      <a class="dropdown-item" href="{% url 'users:profile:user_profile' user.id %}">My Videos</a>
                         <a class="dropdown-item" href="{% url 'users:logout' %}">Logout</a>
                     </li>
                   </ul>

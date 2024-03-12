@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from .models import AuthUser
+from .models import AuthUser, Profile
 
 
 @admin.register(AuthUser)
@@ -38,3 +38,8 @@ class AuthUserAdmin(BaseUserAdmin):
             },
         ),
     )
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    pass
