@@ -2,7 +2,7 @@ from django.shortcuts import reverse
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
-
+from django.conf import settings
 from users.utils.constants import ACTIVATION_AVAILABILITY
 
 
@@ -24,7 +24,7 @@ def send_activation_email(user):
     mail = EmailMultiAlternatives(
         subject="Your account has been created.",
         body=content,
-        from_email="no-reply@evntmngr.xyz",
+        from_email=settings.EMAIL_HOST_USER,
         to=[user.email]
     )
 
