@@ -24,3 +24,4 @@ class AuthUserManager(BaseUserManager):
         user.save(using=self._db)
 
         return user
+    
