@@ -1,7 +1,11 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect
+
 from .forms import VideoForm
-from .vision.video import VideoAnalyser
 from .models import Narration
+from .utils.email import send_email_test
+from .vision.video import VideoAnalyser
+from users.forms import PasswordForm
 
 
 def home_view(request):
@@ -41,3 +45,14 @@ def vision_view(request):
         })
     else:
         return render(request, "website/vision.html")
+
+
+# Email Send Test Function
+def send_email_view(request):
+    send_email_test(
+        name="John Elkan",
+        message="Why so serious? Testing the email functionality.",
+        reply_to="john@gmail.com"
+    )
+    messages.error(request, "Email sent!")
+    return redirect("website:vision")
