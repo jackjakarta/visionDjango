@@ -190,6 +190,12 @@ STORAGES = {
 }
 
 
+# External APIs Keys
+
+OPENAI_API_KEY = config('OPENAI_API_KEY')
+ELEVENLABS_API_KEY = config('ELEVENLABS_API_KEY')
+
+
 # Custom User Model
 
 AUTH_USER_MODEL = 'users.AuthUser'

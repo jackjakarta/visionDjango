@@ -1,18 +1,13 @@
 import base64
-import os
 
 import cv2
-from decouple import config
 from openai import OpenAI
-
-from website.utils import RandomGenerator
-
-OPENAI_API_KEY = config("OPENAI_API_KEY")
+from django.conf import settings
 
 
 class VideoAnalyser:
     def __init__(self, video: str, custom_prompt: str = None):
-        self.client = OpenAI(api_key=OPENAI_API_KEY)
+        self.client = OpenAI(api_key=settings.OPENAI_API_KEY)
         self.video = cv2.VideoCapture(video)
         self.base64frames = None
         self.generated_text = None
@@ -67,18 +62,3 @@ class VideoAnalyser:
         self.generated_text = text_generation.choices[0].message.content
 
         return self.generated_text
-
-    def generate_speech(self):
-        random_string = RandomGenerator(6).random_digits()
-        audio_folder = "audio"
-        os.makedirs(audio_folder, exist_ok=True)
-        audio_path = os.path.join(audio_folder, f"speech_{random_string}.wav")
-
-        audio_response = self.client.audio.speech.create(
-            model="tts-1",
-            voice="fable",
-            input=str(self.generated_text),
-        )
-
-        audio_response.stream_to_file(audio_path)
-        print(f"Audio saved at {audio_path}.\n")
