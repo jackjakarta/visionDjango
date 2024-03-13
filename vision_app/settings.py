@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import json
+import logging.config
 import os
 from pathlib import Path
 from secrets import token_urlsafe
@@ -199,3 +201,6 @@ ELEVENLABS_API_KEY = config('ELEVENLABS_API_KEY')
 # Custom User Model
 
 AUTH_USER_MODEL = 'users.AuthUser'
+
+
+logging.config.dictConfig(json.load(open('logging.config.json')))
