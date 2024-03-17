@@ -1,6 +1,7 @@
 from django.urls import path, include
 
 from users.views import login_user, logout_user, register_view
+from users.views.profile import user_narration
 
 app_name = 'users'
 
@@ -13,4 +14,5 @@ urlpatterns = [
     path('social-auth/', include('social_django.urls')),
 
     path('<int:user_id>/', include('users.urls.profile')),
+    path('narration/<int:narration_id>/', user_narration, name='user_narration'),
 ]

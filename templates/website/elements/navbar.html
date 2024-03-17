@@ -13,16 +13,15 @@
                   <button class="btn btn-default rounded-3 dropdown-toggle me-2" type="button"
                    data-bs-toggle="dropdown" aria-expanded="false"><b>{{ user }}</b></button>
                   <ul class="dropdown-menu">
-                    <li>
-                      <a class="dropdown-item" href="{% url 'users:profile:user_profile' user.id %}">My Videos</a>
-                        <a class="dropdown-item" href="{% url 'users:logout' %}">Logout</a>
-                    </li>
+                    <li><a class="dropdown-item" href="{% url 'users:profile:user_profile' user.id %}">Projects</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="{% url 'users:logout' %}">Logout</a></li>
                   </ul>
                 </div>
           <a href="{% url 'website:vision' %}" class="btn btn-default rounded-3 me-2"><img src="{% static 'website/img/plus-logo.png' %}" class="img-fluid" alt="" width="20" height="20"></a>
           {% else %}
-          <a class="btn btn-default rounded-3 me-2" href="{% url 'website:vision' %}"><b>Login</b></a>
-        <a class="btn btn-default rounded-3 me-2" href="{% url 'users:register' %}"><b>Sign Up</b></a>
+            <a class="btn btn-default rounded-3 me-2" href="{% url 'website:vision' %}"><b>Login</b></a>
+            <a class="btn btn-default rounded-3 me-2" href="{% url 'users:register' %}"><b>Sign Up</b></a>
           {% endif %}
           <a href="https://github.com/jackjakarta/visionDjango" class="btn btn-default rounded-3"><img src="{% static 'website/img/github-logo.png' %}" class="img-fluid" alt="" width="20" height="20"></a>
       </div>
