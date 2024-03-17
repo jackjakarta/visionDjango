@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Your Projects
+{% endblock %}
+
+
+{% block content %}
+<div class="container mt-4">
+  <div class="form-container">
+    <h2 class="text-center mb-4" style="color: #E2E2E2;">Projects</h2>
+    {% if narrations %}
+
+      {% for narration in narrations %}
+        <ul>
+          <li><b>{% if narration.video.title %}<a href="{% url 'users:user_narration' narration.id %}">{{ narration.video.title }}</a>{% else %}No Title{% endif %}</b></li>
+          <li>{% if narration.text %}<a href="{% url 'users:user_narration' narration.id %}" style="color: #E2E2E2;">{{ narration.text|truncatewords:15 }}{% else %}No Text{% endif %}</a></li>
+        </ul>
+      {% endfor %}
+
+    {% else %}
+
+      <p>You have no narrations at the moment.</p>
+
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

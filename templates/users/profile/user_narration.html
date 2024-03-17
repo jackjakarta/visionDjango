@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+Project: {{ narration.video.title }}
+{% endblock %}
+
+
+{% block content %}
+<div class="container mt-4">
+  <div class="form-container">
+    {% if narration %}
+      <h2 class="text-center mb-4" style="color: #E2E2E2;">
+        {{ narration.video.title|default:"No Title" }}
+      </h2>
+      <p>{{ narration.text }}</p>
+      <div class="embed-responsive embed-responsive-16by9">
+        <video class="embed-responsive-item" style="width: 100%; height: 100%;" src="{{ narration.video.video_file.url }}" controls></video>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
