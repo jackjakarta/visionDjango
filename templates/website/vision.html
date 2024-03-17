@@ -2,17 +2,18 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+
 {% block title %}
 Vision
 {% endblock %}
+
 
 {% block style %}
 <link rel="stylesheet" href="{% static 'website/css/form-loader.css' %}">
 {% endblock %}
 
-{% block content %}
 
-{% if user.is_authenticated %}
+{% block content %}
 
 <div class="container mt-7">
     <div class="form-container">
@@ -23,7 +24,7 @@ Vision
             {{ form | crispy }}
 
             <!--Switch-->
-                <p style="color: #E2E2E2;">Use the switch below to enable custom instructions</p>
+            <p style="color: #E2E2E2;">Use the switch below to enable custom instructions</p>
             <div class="form-check form-switch mb-3">
 <!--                <label class="form-check-label" for="switchCheckDefault">Custom Prompt</label>-->
                 <input class="form-check-input" style="width: 7%;" type="checkbox" role="switch" id="switchCheckDefault"/>
@@ -58,31 +59,6 @@ Vision
         </form>
     </div>
 </div>
-
-{% else %}
-
-<div class="container mt-7">
-    <div class="form-container">
-        <h2 class="text-center" style="color: #E2E2E2">Login</h2>
-        <div class="text-center mt-5 mb-4">
-        <a href="#" class="btn btn-light rounded-3"><img src="{% static 'website/img/google-auth-2.png' %}" width="20" height="20" alt="Google Login">  Sign In with Google</a>
-            </div>
-        <form class="form" action="{% url 'users:login' %}" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input name="email" id="email" type="email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input name="password" id="password" type="password" required>
-            </div>
-            <button type="submit" class="btn btn-light btn-lg rounded-3">Login</button>
-        </form>
-    </div>
-</div>
-
-{% endif %}
 
 {% endblock %}
 

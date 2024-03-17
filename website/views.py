@@ -5,46 +5,46 @@ from .forms import VideoForm
 from .models import Narration
 from .utils.email import send_email_test
 from .vision.video import VideoAnalyser
-from users.forms import PasswordForm
 
 
 def home_view(request):
     return redirect("website:vision")
 
 
-# @login_required
 def vision_view(request):
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            form = VideoForm(request.POST, request.FILES)
-            if form.is_valid():
-                video = form.save()
-                video_path = video.video_file.url
+    if not request.user.is_authenticated:
+        return redirect("users:login")
 
-                # Process video
-                analyser = VideoAnalyser(video=video_path, custom_prompt=request.POST.get("prompt"))
-                analyser.read_frames()
-                narration = analyser.generate_narration()
+    if request.method == "POST":
+        form = VideoForm(request.POST, request.FILES)
+        custom_prompt = request.POST.get("prompt")  # Extra field added on template
 
-                # Save Narration to DB
-                if narration is not None:
-                    Narration.objects.create(
-                        text=narration,
-                        user=request.user,
-                        video=video
-                    )
+        if form.is_valid():
+            video = form.save()
+            video_path = video.video_file.url
 
-                    return render(request, "website/vision_results.html", {
-                        "narration": narration,
-                    })
-        else:
-            form = VideoForm()
+            # Process video
+            analyser = VideoAnalyser(video=video_path, custom_prompt=custom_prompt)
+            analyser.read_frames()
+            narration = analyser.generate_narration()
 
-        return render(request, "website/vision.html", {
-            'form': form,
-        })
+            # Save Narration to DB
+            if narration is not None:
+                Narration.objects.create(
+                    text=narration,
+                    user=request.user,
+                    video=video
+                )
+
+                return render(request, "website/vision_results.html", {
+                    "narration": narration,
+                })
     else:
-        return render(request, "website/vision.html")
+        form = VideoForm()
+
+    return render(request, "website/vision.html", {
+        'form': form,
+    })
 
 
 # Email Send Test Function

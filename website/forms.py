@@ -11,3 +11,6 @@ class VideoForm(forms.ModelForm):
                 "placeholder": "Give your video a name in order to find it later..."
             })
         }
+        help_texts = {
+            "video_file": "Supported formats: <b>.mp4</b> only"
+        }

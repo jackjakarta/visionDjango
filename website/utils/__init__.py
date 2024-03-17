@@ -1,8 +1,19 @@
 import base64
+import os
 import random
 import string
 import time
 from datetime import datetime, timezone, timedelta
+
+from django.core.exceptions import ValidationError
+
+
+def validate_video_extension(value):
+    ext = os.path.splitext(value.name)[1]  # Extracts the extension from the filename.
+    valid_extensions = ['.mp4', ]
+
+    if not ext.lower() in valid_extensions:
+        raise ValidationError(u'Unsupported file extension.')
 
 
 def image_to_base64(img_path: str) -> str:
