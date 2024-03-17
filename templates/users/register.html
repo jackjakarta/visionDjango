@@ -12,6 +12,9 @@ Register
 <div class="container mt-7">
   <div class="form-container">
       <h2 class="text-center" style="color: #E2E2E2">Register</h2>
+      <div class="text-center mt-5 mb-4">
+        <a href="{% url 'users:social:begin' 'google-oauth2' %}" class="btn btn-light rounded-3"><img src="{% static 'website/img/google-auth-2.png' %}" width="20" height="20" alt="Google Login">  Sign In with Google</a>
+        </div>
       <form action="" class="form" method="POST" enctype="multipart/form-data">
           <div class="form-group">
               {% csrf_token %}

@@ -13,7 +13,7 @@ Login
     <div class="form-container">
         <h2 class="text-center" style="color: #E2E2E2">Login</h2>
         <div class="text-center mt-5 mb-4">
-        <a href="#" class="btn btn-light rounded-3"><img src="{% static 'website/img/google-auth-2.png' %}" width="20" height="20" alt="Google Login">  Sign In with Google</a>
+        <a href="{% url 'users:social:begin' 'google-oauth2' %}" class="btn btn-light rounded-3"><img src="{% static 'website/img/google-auth-2.png' %}" width="20" height="20" alt="Google Login">  Sign In with Google</a>
             </div>
         <form class="form" action="{% url 'users:login' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}

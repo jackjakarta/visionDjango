@@ -10,6 +10,7 @@ urlpatterns = [
     path('login/', login_user, name='login'),
     path('register/', register_view, name='register'),
     path('activation/', include('users.urls.activation')),
+    path('social-auth/', include('social_django.urls')),
 
     path('<int:user_id>/', include('users.urls.profile')),
 ]
