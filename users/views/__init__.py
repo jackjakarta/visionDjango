@@ -33,14 +33,19 @@ def logout_user(request):
 
 
 def register_view(request):
-    if request.method == "GET":
-        form = RegisterForm()
-    else:
+    if request.user.is_authenticated:
+        messages.error(request, "You are already registered and logged in.")
+        return redirect("website:vision")
+
+    if request.method == "POST":
         form = RegisterForm(request.POST)
+
         if form.is_valid():
             form.save()
             messages.success(request, "You have registered successfully!")
             return redirect("website:vision")
+    else:
+        form = RegisterForm()
 
     return render(request, "users/register.html", {
         "form": form
