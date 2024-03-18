@@ -1,12 +1,12 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect, Http404
+from django.shortcuts import render, redirect
 
+from .audio import ElevenLabsTTS
 from .forms import VideoForm
-from .models import Narration, Audio
+from .models import Narration
 from .utils.email import send_email_test
-from .vision.video import VideoAnalyser
-from .audio import OpenTTS, ElevenLabsTTS
 from .utils.save import save_speech_to_db
+from .vision.video import VideoAnalyser
 
 
 def home_view(request):
@@ -76,13 +76,13 @@ def tts_view(request, narration_id):
         narration.save()
 
         messages.success(request, "You have generated an audio file!")
-        return redirect("website:home")
+        return redirect("users:user_narration", narration_id=narration_id)
 
 
 # Email Send Test Function
 def send_email_view(request):
     send_email_test(
-        name="John Elkan",
+        name="John Elk",
         message="Why so serious? Testing the email functionality.",
         reply_to="john@gmail.com"
     )

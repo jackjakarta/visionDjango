@@ -7,6 +7,11 @@ Project: {{ narration.video.title }}
 {% endblock %}
 
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'website/css/form-loader.css' %}">
+{% endblock %}
+
+
 {% block content %}
 <div class="container mt-4">
   <div class="form-container">
@@ -15,14 +20,50 @@ Project: {{ narration.video.title }}
         {{ narration.video.title|default:"No Title" }}
       </h2>
       <p>{{ narration.text }}</p>
-      <div class="embed-responsive embed-responsive-16by9">
+    <div class="text-center mt-3">
+      {% if not narration.audio %}
+      <form id="myForm" action="{% url 'website:tts' narration.id %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <button id="submitBtn" onclick="showLoadingScreen()" class="btn btn-light btn-sm rounded-3" type="submit">Generate Speech File</button>
+        <div class="text-center">
+            <div id="loading-container" style="display: none;">
+                <div id="spinner-container">
+                    <div class="dot-spinner">
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                    </div>
+                </div>
+            </div>
+            </div>
+      </form>
+      {% else %}
+        <a href="{{ narration.audio.audio_file.url }}" class="btn btn-light btn-sm rounded-3">Download Speech File</a>
+      {% endif %}
+  </div>
+      <div class="embed-responsive embed-responsive-16by9 mt-4">
         <video class="embed-responsive-item" style="width: 100%; height: 100%;" src="{{ narration.video.video_file.url }}" controls></video>
       </div>
-    <form action="{% url 'website:tts' narration.id %}" method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      <button type="submit">Generate File</button>
-    </form>
+
     {% endif %}
   </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+document.getElementById('myForm').addEventListener('submit', function(e) {
+    // Show the spinner
+    document.getElementById('loading-container').style.display = 'block';
+
+    // Disable the submit button to prevent multiple submissions
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.style.display = 'none';
+});
+</script>
 {% endblock %}
