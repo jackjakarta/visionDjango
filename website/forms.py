@@ -12,5 +12,5 @@ class VideoForm(forms.ModelForm):
             })
         }
         help_texts = {
-            "video_file": "Supported formats: <b>.mp4</b> only"
+            "video_file": "<b>15MB</b> max. Supported formats: <b>.mp4</b> only"
         }
