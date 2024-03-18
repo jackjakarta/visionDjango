@@ -18,6 +18,10 @@ Project: {{ narration.video.title }}
       <div class="embed-responsive embed-responsive-16by9">
         <video class="embed-responsive-item" style="width: 100%; height: 100%;" src="{{ narration.video.video_file.url }}" controls></video>
       </div>
+    <form action="{% url 'website:tts' narration.id %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <button type="submit">Generate File</button>
+    </form>
     {% endif %}
   </div>
 </div>

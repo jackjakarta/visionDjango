@@ -1,10 +1,10 @@
 import requests
-from openai import OpenAI
 from django.conf import settings
+from openai import OpenAI
 
 
 class OpenTTS:
-    """Text-To-Speech using ElevenLabs API."""
+    """Text-To-Speech using OpenAI API."""
     def __init__(self, text, voice="fable", model="tts-1"):
         self.client = OpenAI(api_key=settings.OPENAI_API_KEY)
         self.voice = voice

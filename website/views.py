@@ -1,10 +1,12 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, Http404
 
 from .forms import VideoForm
-from .models import Narration
+from .models import Narration, Audio
 from .utils.email import send_email_test
 from .vision.video import VideoAnalyser
+from .audio import OpenTTS, ElevenLabsTTS
+from .utils.save import save_speech_to_db
 
 
 def home_view(request):
@@ -45,6 +47,36 @@ def vision_view(request):
     return render(request, "website/vision.html", {
         'form': form,
     })
+
+
+def tts_view(request, narration_id):
+    if not request.user.is_authenticated:
+        messages.error(request, "You are not logged in.")
+        return redirect("website:home")
+
+    try:
+        narration = Narration.objects.get(pk=narration_id)
+    except Narration.DoesNotExist:
+        messages.error(request, "Narration doesn't exist.")
+        return redirect("website:home")
+
+    if not request.user == narration.user:
+        return redirect("website:home")
+
+    if request.method == "POST":
+        tts = ElevenLabsTTS(
+            text=str(narration.text),
+            voice="21m00Tcm4TlvDq8ikWAM"
+        )
+
+        audio_file = tts.generate()
+        audio_obj = save_speech_to_db(narration, audio_file)
+        narration.audio = audio_obj
+
+        narration.save()
+
+        messages.success(request, "You have generated an audio file!")
+        return redirect("website:home")
 
 
 # Email Send Test Function

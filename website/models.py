@@ -18,6 +18,17 @@ class Video(CustomModel):
         return self.__str__()
 
 
+class Audio(CustomModel):
+    title = models.CharField(max_length=100, blank=True, null=True)
+    audio_file = models.FileField(upload_to='audio/')
+
+    def __str__(self):
+        return self.title
+
+    def __repr__(self):
+        return self.__str__()
+
+
 class Narration(CustomModel):
     text = models.TextField(null=True)
     user = models.ForeignKey(
@@ -26,11 +37,18 @@ class Narration(CustomModel):
         related_name='narrations',
         related_query_name='narration'
     )
-    video = models.ForeignKey(
+    video = models.OneToOneField(
         Video,
         on_delete=models.CASCADE,
         related_name='videos',
         related_query_name='video'
+    )
+    audio = models.OneToOneField(
+        Audio,
+        on_delete=models.CASCADE,
+        related_name='audios',
+        related_query_name='audio',
+        null=True
     )
 
     def __str__(self):

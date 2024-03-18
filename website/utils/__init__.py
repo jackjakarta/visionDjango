@@ -11,9 +11,13 @@ from django.core.exceptions import ValidationError
 def validate_video_extension(value):
     ext = os.path.splitext(value.name)[1]  # Extracts the extension from the filename.
     valid_extensions = ['.mp4', ]
+    max_size = 15 * 1024 * 1024  # 15MB in bytes
 
     if not ext.lower() in valid_extensions:
         raise ValidationError(u'Unsupported file extension.')
+
+    if value.size > max_size:
+        raise ValidationError('File too large. Size should not exceed 10MB.')
 
 
 def image_to_base64(img_path: str) -> str:
