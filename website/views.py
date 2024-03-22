@@ -76,7 +76,7 @@ def tts_view(request, narration_id):
 
         narration.save()
 
-        messages.success(request, "You have generated an audio file!")
+        messages.success(request, "You have generated a speech file!")
         return redirect("users:user_narration", narration_id=narration_id)
 
 
