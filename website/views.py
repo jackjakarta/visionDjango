@@ -61,6 +61,7 @@ def tts_view(request, narration_id):
         return redirect("website:home")
 
     if not request.user == narration.user:
+        messages.error(request, "This is not your narration!")
         return redirect("website:home")
 
     if request.method == "POST":
@@ -86,5 +87,5 @@ def send_email_view(request):
         message="Why so serious? Testing the email functionality.",
         reply_to="john@gmail.com"
     )
-    messages.error(request, "Email sent!")
+    messages.success(request, "Email sent!")
     return redirect("website:vision")

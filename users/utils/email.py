@@ -1,8 +1,9 @@
-from django.shortcuts import reverse
+from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMultiAlternatives
+from django.shortcuts import reverse
 from django.template.loader import get_template
-from django.conf import settings
+
 from users.utils.constants import ACTIVATION_AVAILABILITY
 
 

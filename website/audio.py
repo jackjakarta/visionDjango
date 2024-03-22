@@ -24,7 +24,7 @@ class OpenTTS:
 
 class ElevenLabsTTS:
     """Text-To-Speech using ElevenLabs API."""
-    def __init__(self, text, voice, model="eleven_multilingual_v2"):
+    def __init__(self, text, voice, model="eleven_turbo_v2"):
         self.text = text
         self.voice = voice
         self.model = model

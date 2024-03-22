@@ -42,8 +42,8 @@ class Activation(models.Model):
     token = models.CharField(
         max_length=64,
         null=True,
-        unique=True,  # new
-        default=None,  # new
+        unique=True,
+        default=None,
     )
     expires_at = models.DateTimeField(
         default=None
