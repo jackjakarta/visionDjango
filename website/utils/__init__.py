@@ -14,10 +14,10 @@ def validate_video_extension(value):
     max_size = 15 * 1024 * 1024  # 15MB in bytes
 
     if not ext.lower() in valid_extensions:
-        raise ValidationError(u'Unsupported file extension.')
+        raise ValidationError('Unsupported file extension.')
 
     if value.size > max_size:
-        raise ValidationError('File too large. Size should not exceed 10MB.')
+        raise ValidationError('File too large. Size should not exceed 15MB.')
 
 
 def image_to_base64(img_path: str) -> str:
