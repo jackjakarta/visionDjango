@@ -1,6 +1,6 @@
-from django.urls import path, include
+from django.urls import path
 
-from users.views.profile import user_profile, user_narration
+from users.views.profile import user_profile
 
 app_name = 'profile'
 
