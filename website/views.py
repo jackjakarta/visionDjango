@@ -1,6 +1,7 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
+from users.utils.decorators import user_is_authenticated
 from .audio import ElevenLabsTTS
 from .forms import VideoForm
 from .models import Narration
@@ -49,16 +50,9 @@ def vision_view(request):
     })
 
 
+@user_is_authenticated
 def tts_view(request, narration_id):
-    if not request.user.is_authenticated:
-        messages.error(request, "You are not logged in.")
-        return redirect("website:home")
-
-    try:
-        narration = Narration.objects.get(pk=narration_id)
-    except Narration.DoesNotExist:
-        messages.error(request, "Narration doesn't exist.")
-        return redirect("website:home")
+    narration = get_object_or_404(Narration, pk=narration_id)
 
     if not request.user == narration.user:
         messages.error(request, "This is not your narration!")
