@@ -43,13 +43,16 @@ Project: {{ narration.video.title }}
             </div>
       </form>
       {% else %}
-        <a href="{{ narration.audio.audio_file.url }}" class="btn btn-light btn-sm rounded-3">Download Speech File</a>
+        <div>
+            <audio controls>
+                <source src="{{ narration.audio.audio_file.url }}" type="audio/mp3">
+            </audio>
+        </div>
       {% endif %}
   </div>
       <div class="embed-responsive embed-responsive-16by9 mt-4">
         <video class="embed-responsive-item" style="width: 100%; height: 100%;" src="{{ narration.video.video_file.url }}" controls></video>
       </div>
-
     {% endif %}
   </div>
 </div>
