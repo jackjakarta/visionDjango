@@ -29,12 +29,6 @@ def create_user(strategy, details, backend, user=None, *args, **kwargs):
 #
 #     if backend.name == 'google-oauth2':
 #         url = response.get('picture')
-#     elif backend.name == 'facebook':
-#         url = 'https://graph.facebook.com/%s/picture?access_token=%s' % (
-#             response['id'],
-#             response['access_token']
-#         )
-#         params['type'] = 'large'
 #
 #     if url:
 #         try:

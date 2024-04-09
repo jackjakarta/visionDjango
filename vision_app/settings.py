@@ -208,7 +208,6 @@ AUTH_USER_MODEL = 'users.AuthUser'
 
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.google.GoogleOAuth2',
-    'social_core.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
@@ -218,13 +217,6 @@ SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'website:home'
 SOCIAL_AUTH_LOGIN_URL = '/'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_APP_ID')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('GOOGLE_APP_SECRET')
-SOCIAL_AUTH_FACEBOOK_KEY = config('FB_APP_ID')
-SOCIAL_AUTH_FACEBOOK_SECRET = config('FB_APP_SECRET')
-SOCIAL_AUTH_FACEBOOK_API_VERSION = '19.0'
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'public_profile']
-SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-    'fields': 'email,first_name,last_name',
-}
 
 
 SOCIAL_AUTH_PIPELINE = (
@@ -241,5 +233,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.user_details',
 )
 
+
+# Heroku Logging
 
 logging.config.dictConfig(json.load(open('logging.config.json')))
