@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
-
+from libgravatar import Gravatar
 from users.models import Profile
 from users.utils.decorators import user_is_authenticated
 from website.models import Narration
@@ -12,9 +12,13 @@ def user_profile(request, user_id):
     narrations = Narration.objects.filter(user_id=user_id)
 
     if request.user == profile.user:
+        gravatar_profile = Gravatar(email=profile.user.email)
+        avatar_url = gravatar_profile.get_image(size=500)
+
         return render(request, "users/profile/user_profile.html", {
             "profile": profile,
             "narrations": narrations,
+            "avatar_url": avatar_url,
         })
     else:
         messages.error(request, "This is not your profile!")

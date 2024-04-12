@@ -10,8 +10,11 @@ Your Projects
 <div class="container mt-4">
   <div class="form-container">
     <h2 class="text-center mb-4" style="color: #E2E2E2;">Projects</h2>
-    {% if narrations %}
 
+    <div class="text-center mb-4">
+      <img src="{% if avatar_url %}{{ avatar_url }}{% else %}{% static 'website/img/default-avatar.png' %}{% endif %}" class="img-fluid rounded-circle" alt="..." width="125" height="125">
+    </div>
+    {% if narrations %}
       {% for narration in narrations %}
         <ul>
           <li><b>{% if narration.video.title %}<a href="{% url 'users:user_narration' narration.id %}">{{ narration.video.title }}</a>{% else %}No Title{% endif %}</b></li>
