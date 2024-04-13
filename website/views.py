@@ -1,10 +1,14 @@
+import requests
 from django.contrib import messages
+from django.core.cache import cache
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from users.utils.decorators import user_is_authenticated
 from .audio import ElevenLabsTTS
 from .forms import VideoForm
 from .models import Narration
+from .tasks import task_one, process_data
 from .utils.email import send_email_test
 from .utils.save import save_speech_to_db
 from .vision.video import VideoAnalyser
@@ -83,3 +87,26 @@ def send_email_view(request):
     )
     messages.success(request, "Email sent!")
     return redirect("website:vision")
+
+
+def call_api_and_process(request):
+    try:
+        response = requests.get('https://api.chucknorris.io/jokes/random')
+        response.raise_for_status()
+        data = response.json()
+        job_id = process_data.delay(data['value'])
+
+        return JsonResponse({'status': 'success', 'job_id': job_id.id})
+
+    except requests.RequestException as e:
+        return JsonResponse({'status': 'error', 'message': str(e)})
+
+
+def get_results(request, job_id):
+    # Attempt to get the results from the cache
+    result = cache.get(job_id)
+
+    if result is not None:
+        return JsonResponse({'status': 'success', 'data': result})
+    else:
+        return JsonResponse({'status': 'processing', 'message': 'Results not ready yet'})
