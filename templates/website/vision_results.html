@@ -10,10 +10,17 @@ Vision Result
 {% block content %}
 
 <div class="container mt-4">
-  <div class="form-container">
-      <h2 class="text-center mb-4" style="color: #E2E2E2;">Narration for your video</h2>
-    <div id="text-container"></div>
-  </div>
+    <div class="form-container">
+        {% if refresh_button %}
+            <div class="text-center">
+                <h4 class="mb-4" style="color: #E2E2E2;">{{ api_response }}</h4>
+                <a class="btn btn-light btn-lg rounded-3" href="{% url 'website:get_results' job_id %}">Check Process</a>
+            </div>
+        {% else %}
+            <h4 class="text-center mb-4" style="color: #E2E2E2;">Your Narration</h4>
+            <div id="text-container"></div>
+        {% endif %}
+    </div>
 </div>
 
 {% endblock %}
@@ -21,7 +28,7 @@ Vision Result
 {% block script %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-    const text = "{% if narration %}{{ narration|safe }}{% else %}No narration generated.{% endif %}";
+    const text = "{{ api_response|safe }}";
     let i = 0;
     const container = document.getElementById('text-container');
 

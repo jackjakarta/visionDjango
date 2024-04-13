@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+Processing
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container mt-4">
+  <div class="form-container">
+      <div class="text-center">
+        <h4 class="text-center mb-4" style="color: #E2E2E2;">Your video is processing...</h4>
+        <a class="btn btn-light btn-lg rounded-3" href="{% url 'website:get_results' job_id %}">Check Process</a>
+      </div>
+  </div>
+</div>
+
+{% endblock %}
