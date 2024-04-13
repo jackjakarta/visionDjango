@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+Vision Result
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container mt-4">
+  <div class="form-container">
+      <h2 class="text-center mb-4" style="color: #E2E2E2;">Text here</h2>
+      <a href="{% url 'website:get_results' job_id %}">Check results.</a>
+  </div>
+</div>
+
+{% endblock %}

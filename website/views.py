@@ -1,4 +1,3 @@
-import requests
 from django.contrib import messages
 from django.core.cache import cache
 from django.http import JsonResponse
@@ -8,7 +7,7 @@ from users.utils.decorators import user_is_authenticated
 from .audio import ElevenLabsTTS
 from .forms import VideoForm
 from .models import Narration
-from .tasks import task_one, process_data
+from .tasks import process_data
 from .utils.email import send_email_test
 from .utils.save import save_speech_to_db
 from .vision.video import VideoAnalyser
@@ -18,10 +17,8 @@ def home_view(request):
     return redirect("website:vision")
 
 
+@user_is_authenticated
 def vision_view(request):
-    if not request.user.is_authenticated:
-        return redirect("users:login")
-
     if request.method == "POST":
         form = VideoForm(request.POST, request.FILES)
         custom_prompt = request.POST.get("prompt")  # Extra field added on template
@@ -80,33 +77,35 @@ def tts_view(request, narration_id):
 
 # Email Send Test Function
 def send_email_view(request):
-    send_email_test(
-        name="John Elk",
-        message="Why so serious? Testing the email functionality.",
-        reply_to="john@gmail.com"
-    )
-    messages.success(request, "Email sent!")
-    return redirect("website:vision")
+    if request.user.is_superuser:
+        send_email_test(
+            name="John Elk",
+            message="Why so serious? Testing the email functionality.",
+            reply_to="john@gmail.com"
+        )
+        messages.success(request, "Email sent!")
+        return redirect("website:vision")
 
 
 def call_api_and_process(request):
-    try:
-        response = requests.get('https://api.chucknorris.io/jokes/random')
-        response.raise_for_status()
-        data = response.json()
-        job_id = process_data.delay(data['value'])
+    job_id = process_data.delay("animal")
 
-        return JsonResponse({'status': 'success', 'job_id': job_id.id})
-
-    except requests.RequestException as e:
-        return JsonResponse({'status': 'error', 'message': str(e)})
+    # return JsonResponse({'status': 'success', 'job_id': job_id.id})
+    return render(request, "website/async.html", {
+        "job_id": job_id.id,
+    })
 
 
 def get_results(request, job_id):
-    # Attempt to get the results from the cache
     result = cache.get(job_id)
 
     if result is not None:
-        return JsonResponse({'status': 'success', 'data': result})
+        return render(request, "website/async_result.html", {
+            "joke": result,
+        })
+        # return JsonResponse({'status': 'success', 'data': result})
     else:
-        return JsonResponse({'status': 'processing', 'message': 'Results not ready yet'})
+        # return JsonResponse({'status': 'processing', 'message': 'Results not ready yet'})
+        return render(request, "website/async_result.html", {
+            "joke": "Results not ready yet."
+        })

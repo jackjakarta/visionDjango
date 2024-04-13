@@ -21,7 +21,7 @@ Vision Result
 {% block script %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-    const text = "{% if narration %}{{ narration|safe }}{% else %}No narration generated.{% endif %}";
+    const text = "{{ message|safe }}";
     let i = 0;
     const container = document.getElementById('text-container');
 
