@@ -1,16 +1,14 @@
 from django.contrib import messages
 from django.core.cache import cache
-from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from users.utils.decorators import user_is_authenticated
 from .audio import ElevenLabsTTS
 from .forms import VideoForm
 from .models import Narration
-from .tasks import process_data
+from .tasks import process_video
 from .utils.email import send_email_test
 from .utils.save import save_speech_to_db
-from .vision.video import VideoAnalyser
 
 
 def home_view(request):
@@ -25,30 +23,38 @@ def vision_view(request):
 
         if form.is_valid():
             video = form.save()
-            video_path = video.video_file.url
+            video_id = video.pk  # 'video' is an instance of the Video model
+            user_id = request.user.pk
 
             # Process video
-            analyser = VideoAnalyser(video=video_path, custom_prompt=custom_prompt)
-            analyser.read_frames()
-            narration = analyser.generate_narration()
+            job_id = process_video.delay(video_id, user_id, custom_prompt)
 
-            # Save Narration to DB
-            if narration is not None:
-                Narration.objects.create(
-                    text=narration,
-                    user=request.user,
-                    video=video
-                )
-
-                return render(request, "website/vision_results.html", {
-                    "narration": narration,
-                })
+            return render(request, "website/async.html", {
+                "job_id": job_id.id,
+            })
     else:
         form = VideoForm()
 
     return render(request, "website/vision.html", {
         'form': form,
     })
+
+
+@user_is_authenticated
+def get_vision_results(request, job_id):
+    result = cache.get(job_id)
+
+    if result is not None:
+        return render(request, "website/vision_results.html", {
+            "api_response": result,
+            "refresh_button": False,
+        })
+    else:
+        return render(request, "website/vision_results.html", {
+            "api_response": "We are still working on it...",
+            "job_id": job_id,
+            "refresh_button": True,
+        })
 
 
 @user_is_authenticated
@@ -85,27 +91,3 @@ def send_email_view(request):
         )
         messages.success(request, "Email sent!")
         return redirect("website:vision")
-
-
-def call_api_and_process(request):
-    job_id = process_data.delay("animal")
-
-    # return JsonResponse({'status': 'success', 'job_id': job_id.id})
-    return render(request, "website/async.html", {
-        "job_id": job_id.id,
-    })
-
-
-def get_results(request, job_id):
-    result = cache.get(job_id)
-
-    if result is not None:
-        return render(request, "website/async_result.html", {
-            "joke": result,
-        })
-        # return JsonResponse({'status': 'success', 'data': result})
-    else:
-        # return JsonResponse({'status': 'processing', 'message': 'Results not ready yet'})
-        return render(request, "website/async_result.html", {
-            "joke": "Results not ready yet."
-        })
