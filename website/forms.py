@@ -8,9 +8,13 @@ class VideoForm(forms.ModelForm):
         fields = ['title', 'video_file']
         widgets = {
             "title": forms.TextInput(attrs={
-                "placeholder": "Give your video a name in order to find it later..."
+                "placeholder": "My first project"
             })
         }
+        labels = {
+            "title": "Project Name",
+        }
         help_texts = {
+            "title": "Give your project a title in order to find it later.",
             "video_file": "<b>15MB</b> max. Supported formats: <b>.mp4</b> only"
         }

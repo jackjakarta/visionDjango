@@ -9,7 +9,7 @@ from website.models import Narration
 @user_is_authenticated
 def user_profile(request, user_id):
     profile = get_object_or_404(Profile, user_id=user_id)
-    narrations = Narration.objects.filter(user_id=user_id)
+    narrations = Narration.objects.filter(user_id=user_id).order_by("-created_at")
 
     if request.user == profile.user:
         gravatar_profile = Gravatar(email=profile.user.email)

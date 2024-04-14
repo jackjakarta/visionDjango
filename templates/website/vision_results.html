@@ -19,6 +19,9 @@ Vision Result
         {% else %}
             <h4 class="text-center mb-4" style="color: #E2E2E2;">Your Narration</h4>
             <div id="text-container"></div>
+            <div class="text-center mt-4">
+                <a class="btn btn-light btn-lg rounded-3" href="{% url 'users:profile:user_profile' user.id %}">Your Projects</a>
+            </div>
         {% endif %}
     </div>
 </div>
