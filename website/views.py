@@ -1,13 +1,15 @@
 from django.contrib import messages
 from django.core.cache import cache
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 
 from users.utils.decorators import user_is_authenticated
-from .audio import ElevenLabsTTS
+from .audio.tts import ElevenLabsTTS
+from .audio.voices import BELLA
 from .forms import VideoForm
 from .models import Narration
 from .tasks import process_video
 from .utils.email import send_email_test
+from .utils.moderation import is_harmful
 from .utils.save import save_speech_to_db
 
 
@@ -21,16 +23,20 @@ def vision_view(request):
         form = VideoForm(request.POST, request.FILES)
         custom_prompt = request.POST.get("prompt")  # Extra field added on template
 
+        if is_harmful(custom_prompt):
+            messages.error(request, "Your custom prompt contains harmful language!")
+            return redirect("website:home")
+
         if form.is_valid():
             video = form.save()
-            video_id = video.pk  # 'video' is an instance of the Video model
+            video_id = video.pk
             user_id = request.user.pk
 
-            # Process video
+            # Process video / Start celery task
             job_id = process_video.delay(video_id, user_id, custom_prompt)
 
             return render(request, "website/vision_results.html", {
-                "api_response": "We are still working on it...",
+                "api_response": "We are working on it...",
                 "job_id": job_id,
                 "refresh_button": True,
             })
@@ -71,7 +77,7 @@ def tts_view(request, narration_id):
     if request.method == "POST":
         tts = ElevenLabsTTS(
             text=str(narration.text),
-            voice="21m00Tcm4TlvDq8ikWAM"
+            voice=BELLA
         )
 
         audio_file = tts.generate()
@@ -82,6 +88,8 @@ def tts_view(request, narration_id):
 
         messages.success(request, "You have generated a speech file!")
         return redirect("users:user_narration", narration_id=narration_id)
+    else:
+        return HttpResponse("Method not allowed", status=405)
 
 
 # Email Send Test Function
@@ -94,3 +102,5 @@ def send_email_view(request):
         )
         messages.success(request, "Email sent!")
         return redirect("website:vision")
+    else:
+        return HttpResponse("Forbidden", status=403)
