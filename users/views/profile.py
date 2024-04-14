@@ -1,6 +1,8 @@
 from django.contrib import messages
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from libgravatar import Gravatar
+
 from users.models import Profile
 from users.utils.decorators import user_is_authenticated
 from website.models import Narration
@@ -9,17 +11,26 @@ from website.models import Narration
 @user_is_authenticated
 def user_profile(request, user_id):
     profile = get_object_or_404(Profile, user_id=user_id)
-    narrations = Narration.objects.filter(user_id=user_id).order_by("-created_at")
 
     if request.user == profile.user:
+        # Avatar from Gravatar
         gravatar_profile = Gravatar(email=profile.user.email)
         avatar_url = gravatar_profile.get_image(size=500)
 
+        # User Narrations
+        narrations = Narration.objects.filter(user_id=user_id).order_by("-created_at")
+
+        # Paginator
+        paginator = Paginator(narrations, 7)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         return render(request, "users/profile/user_profile.html", {
             "profile": profile,
-            "narrations": narrations,
             "avatar_url": avatar_url,
+            "page_obj": page_obj,
         })
+
     else:
         messages.error(request, "This is not your profile!")
         return redirect("website:home")
