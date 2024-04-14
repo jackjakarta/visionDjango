@@ -29,8 +29,10 @@ def vision_view(request):
             # Process video
             job_id = process_video.delay(video_id, user_id, custom_prompt)
 
-            return render(request, "website/async.html", {
-                "job_id": job_id.id,
+            return render(request, "website/vision_results.html", {
+                "api_response": "We are still working on it...",
+                "job_id": job_id,
+                "refresh_button": True,
             })
     else:
         form = VideoForm()
@@ -45,6 +47,7 @@ def get_vision_results(request, job_id):
     result = cache.get(job_id)
 
     if result is not None:
+        messages.success(request, "Your narration is ready.")
         return render(request, "website/vision_results.html", {
             "api_response": result,
             "refresh_button": False,
