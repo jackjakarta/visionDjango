@@ -63,25 +63,6 @@ Video Narration
 {% endblock %}
 
 {% block script %}
-<script type="text/javascript">
-document.getElementById('myForm').addEventListener('submit', function(e) {
-    // Show the spinner
-    document.getElementById('loading-container').style.display = 'block';
-
-    // Disable the submit button to prevent multiple submissions
-    const submitBtn = document.getElementById('submitBtn');
-    submitBtn.style.display = 'none';
-});
-</script>
-<script>
-    $(document).ready(function(){
-        $('#switchCheckDefault').change(function(){
-            if(this.checked) {
-                $('#promptField').show();
-            } else {
-                $('#promptField').hide();
-            }
-        });
-    });
-</script>
+<script type="text/javascript" src="{% static 'website/js/form-loader-basic.js' %}"></script>
+<script type="text/javascript" src="{% static 'website/js/custom-field.js' %}"></script>
 {% endblock %}

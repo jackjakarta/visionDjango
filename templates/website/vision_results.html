@@ -6,6 +6,10 @@
 Vision Result
 {% endblock %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'website/css/form-loader.css' %}">
+{% endblock %}
+
 
 {% block content %}
 
@@ -13,8 +17,30 @@ Vision Result
     <div class="form-container">
         {% if refresh_button %}
             <div class="text-center">
-                <h4 class="mb-4" style="color: #E2E2E2;">{{ api_response }}</h4>
-                <a class="btn btn-light btn-lg rounded-3" href="{% url 'website:get_results' job_id %}">Check Process</a>
+                <form action="{% url 'website:get_results' job_id %}" id="myForm">
+                    {% csrf_token %}
+                    <h4 id="myTitle" class="mb-4" style="color: #E2E2E2;">{{ api_response }}</h4>
+
+                    <button class="btn btn-light btn-lg rounded-3" id="submitBtn" onclick="showLoadingScreen()" type="submit">Check Process</button>
+                </form>
+            </div>
+
+            <!--Loader-->
+            <div class="text-center mt-4">
+                <div id="loading-container" style="display: none;">
+                    <div id="spinner-container">
+                        <div class="dot-spinner">
+                            <div class="dot-spinner__dot"></div>
+                            <div class="dot-spinner__dot"></div>
+                            <div class="dot-spinner__dot"></div>
+                            <div class="dot-spinner__dot"></div>
+                            <div class="dot-spinner__dot"></div>
+                            <div class="dot-spinner__dot"></div>
+                            <div class="dot-spinner__dot"></div>
+                            <div class="dot-spinner__dot"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         {% else %}
             <h4 class="text-center mb-4" style="color: #E2E2E2;">Your Narration</h4>
@@ -46,4 +72,6 @@ Vision Result
     displayLetter(); // Start the animation
 });
 </script>
+
+<script type="text/javascript" src="{% static 'website/js/form-loader-custom.js' %}"></script>
 {% endblock %}
