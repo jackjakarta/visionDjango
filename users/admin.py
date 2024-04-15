@@ -2,8 +2,9 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
+from rest_framework_api_key.admin import APIKeyModelAdmin
 
-from .models import AuthUser, Profile
+from .models import AuthUser, Profile, UserAPIKey
 
 
 @admin.register(AuthUser)
@@ -65,3 +66,9 @@ class ProfileAdmin(admin.ModelAdmin):
             return format_html('<img src="%s" width="50px" />' % obj.avatar.url)
 
     display_avatar.short_description = "Current Avatar"
+
+
+@admin.register(UserAPIKey)
+class UserAPIKeyModelAdmin(APIKeyModelAdmin):
+    list_display = [*APIKeyModelAdmin.list_display, "user"]
+    search_fields = [*APIKeyModelAdmin.search_fields, "user__email"]

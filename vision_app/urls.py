@@ -8,6 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('website.urls')),
     path('', include('users.urls')),
+    path('api/', include('api.urls')),
 
     # Password Reset Views
     path(

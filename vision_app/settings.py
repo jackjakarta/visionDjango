@@ -39,6 +39,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    # Django Apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,15 +47,35 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Installed
     'social_django',
     'crispy_forms',
     'crispy_bootstrap5',
+    'rest_framework',
+    'rest_framework_api_key',
     'users',
     'website',
+    'api',
     'storages',
 ]
 
 SITE_ID = 1
+
+
+# Rest Framework Settings
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'api.permissions.UserHasAPIKey',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'api.permissions.APIKeyAuthentication',
+    ]
+}
+
+API_KEY_CUSTOM_HEADER = 'HTTP_X_API_KEY'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -234,9 +255,11 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.user_details',
 )
 
+
+# Celery and Redis Settings
+
 CELERY_BROKER_URL = config('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND')
-
 
 CACHES = {
     'default': {
@@ -247,6 +270,7 @@ CACHES = {
         }
     }
 }
+
 
 # Heroku Logging
 
