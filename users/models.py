@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from rest_framework_api_key.models import AbstractAPIKey
 
 from vision_app.models import CustomModel
 from website.utils.constants import COUNTRY_CHOICES
@@ -75,3 +76,11 @@ class Profile(CustomModel):
 
     def __repr__(self):
         return self.__str__()
+
+
+class UserAPIKey(AbstractAPIKey):
+    user = models.ForeignKey(
+        AuthUser,
+        on_delete=models.CASCADE,
+        related_name="api_keys"
+    )

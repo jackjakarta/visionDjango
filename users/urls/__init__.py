@@ -3,8 +3,6 @@ from django.urls import path, include
 from users.views import login_user, logout_user, register_view
 from users.views.profile import user_narration
 
-from django.contrib.auth import views as auth_views
-
 app_name = 'users'
 
 
