@@ -20,7 +20,7 @@ class Video(CustomModel):
 
 class Audio(CustomModel):
     title = models.CharField(max_length=100, blank=True, null=True)
-    audio_file = models.FileField(upload_to='audio/')
+    audio_file = models.FileField(upload_to='audio/', null=True)
 
     def __str__(self):
         return self.title

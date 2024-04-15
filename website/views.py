@@ -3,14 +3,13 @@ from django.core.cache import cache
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 
 from users.utils.decorators import user_is_authenticated
-from .audio.tts import ElevenLabsTTS
-from .audio.voices import BELLA
+from .audio.tts import OpenTTS, ElevenLabsTTS
+from .audio.voices import RACHEL
 from .forms import VideoForm
 from .models import Narration
 from .tasks import process_video
 from .utils.email import send_email_test
 from .utils.moderation import is_harmful
-from .utils.save import save_speech_to_db
 
 
 def home_view(request):
@@ -75,19 +74,27 @@ def tts_view(request, narration_id):
         return redirect("website:home")
 
     if request.method == "POST":
-        tts = ElevenLabsTTS(
-            text=str(narration.text),
-            voice=BELLA
-        )
+        tts_choice = request.POST.get("tts_choice")
 
-        audio_file = tts.generate()
-        audio_obj = save_speech_to_db(narration, audio_file)
+        if tts_choice == "elevenlabs":
+            tts = ElevenLabsTTS(
+                text=narration.text,
+                voice=RACHEL
+            )
+        else:
+            tts = OpenTTS(text=narration.text)
+
+        audio_obj = tts.speech_for_narration(narration)
         narration.audio = audio_obj
-
         narration.save()
 
-        messages.success(request, "You have generated a speech file!")
+        if audio_obj is not None:
+            messages.success(request, "You have generated a speech file!")
+        else:
+            messages.error(request, "There was a problem generating your speech file. Please try again.")
+
         return redirect("users:user_narration", narration_id=narration_id)
+
     else:
         return HttpResponse("Method not allowed", status=405)
 

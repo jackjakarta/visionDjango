@@ -24,8 +24,12 @@ Project: {{ narration.video.title }}
       {% if not narration.audio %}
       <form id="myForm" action="{% url 'website:tts' narration.id %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <button id="submitBtn" onclick="showLoadingScreen()" class="btn btn-light btn-sm rounded-3" type="submit">Generate Speech File</button>
-        <div class="text-center">
+        <select name="tts_choice" id="tts_choice" class="form-control">
+            <option value="openai">OpenAI TTS</option>
+            <option value="elevenlabs">ElevenLabs TTS (not working)</option>
+        </select>
+        <button id="submitBtn" onclick="showLoadingScreen()" class="btn btn-light btn-sm rounded-3 mt-3" type="submit">Generate Speech File</button>
+        <div class="text-center mt-3">
             <div id="loading-container" style="display: none;">
                 <div id="spinner-container">
                     <div class="dot-spinner">
