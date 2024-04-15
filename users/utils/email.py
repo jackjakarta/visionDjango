@@ -10,7 +10,7 @@ from users.utils.constants import ACTIVATION_AVAILABILITY
 def send_activation_email(user):
     domain = Site.objects.get_current().domain
     url = reverse("users:activation:activate", args=(user.activation.token, ))
-    activation_url = f"{domain}{url}"
+    activation_url = f"https://{domain}{url}"
     print(activation_url)
 
     context = {
