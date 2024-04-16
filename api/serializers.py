@@ -41,3 +41,7 @@ class NarrationSerializer(serializers.ModelSerializer):
             representation['user'] = UserSerializer(user).data
 
         return representation
+
+
+class TTSSerializer(serializers.Serializer):
+    text = serializers.CharField(max_length=250, required=True)

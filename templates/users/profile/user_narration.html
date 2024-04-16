@@ -24,7 +24,8 @@ Project: {{ narration.video.title }}
       {% if not narration.audio %}
       <form id="myForm" action="{% url 'website:tts' narration.id %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <select name="tts_choice" id="tts_choice" class="form-control">
+        <select name="tts_choice" id="tts_choice" class="form-control" aria-label="Default select example">
+            <option selected>Select TTS Model</option>
             <option value="openai">OpenAI TTS</option>
             <option value="elevenlabs">ElevenLabs TTS (not working)</option>
         </select>

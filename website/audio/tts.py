@@ -19,7 +19,16 @@ class OpenTTS:
         self.audio_data = b""
         self.byte_count = 0
 
-    def _generate_speech(self) -> bytes:
+    def __str__(self):
+        audio_str = {
+            "voice_id": self.voice,
+            "model": self.model,
+            "input_text": self.text,
+        }
+
+        return audio_str
+
+    def _generate(self) -> bytes:
         self.response = self.client.audio.speech.create(
             input=self.text,
             model=self.model,
@@ -30,14 +39,22 @@ class OpenTTS:
             self.audio_data += chunk
 
         self.byte_count = len(self.audio_data)
+
         return self.audio_data
 
     def speech_for_narration(self, narration: Narration) -> Audio:
+        """
+        Generates and saves TTS to narration in db.
+
+        :return: Returns None and aborts save to db if input text is None or the file size is too low.
+        """
+
         if narration.text:
-            audio_data = self._generate_speech()
+            audio_data = self._generate()
+            file_id = token_urlsafe(8)
 
             if self.byte_count > 220:
-                file_name = f"speech_{narration.video.title}_{token_urlsafe(8)}.mp3"
+                file_name = f"speech_{narration.video.title}_{file_id}.mp3"
 
                 # Create a new Audio instance
                 new_speech = Audio.objects.create(
@@ -56,6 +73,31 @@ class OpenTTS:
 
                 return new_speech
 
+    def speech_for_api(self) -> Audio:
+        audio_data = self._generate()
+        file_id = token_urlsafe(8)
+
+        # Returns None if file size is under a certain size
+        if self.byte_count > 220:
+            file_name = f"speech_api_{file_id}.mp3"
+
+            # Create a new Audio instance
+            new_speech = Audio.objects.create(
+                title=f"ID: {file_id}",
+            )
+
+            # Create a Django File object from API response content
+            django_file = ContentFile(audio_data, name=file_name)
+
+            # Save to model field
+            new_speech.audio_file.save(
+                django_file.name,
+                django_file,
+                save=True
+            )
+
+            return new_speech
+
 
 class ElevenLabsTTS:
     """Text-To-Speech using ElevenLabs API."""
@@ -67,7 +109,16 @@ class ElevenLabsTTS:
         self.response = None
         self.byte_count = 0
 
-    def _generate_speech(self) -> bytes:
+    def __str__(self):
+        audio_str = {
+            "voice_id": self.voice,
+            "model": self.model,
+            "input_text": self.text,
+        }
+
+        return audio_str
+
+    def _generate(self) -> bytes:
         url = f"https://api.elevenlabs.io/v1/text-to-speech/{self.voice}"
 
         headers = {
@@ -93,15 +144,49 @@ class ElevenLabsTTS:
         return self.response.content
 
     def speech_for_narration(self, narration: Narration) -> Audio:
-        if narration.text:
-            audio_data = self._generate_speech()
+        """
+        Generates and saves TTS to narration in db.
 
+        :return: Returns None if input text is None or the file size is too low.
+        """
+
+        if narration.text:
+            audio_data = self._generate()
+            file_id = token_urlsafe(8)
+
+            # Returns None if file size is a certain size
             if self.byte_count > 220:
-                file_name = f"speech_{narration.video.title}_{token_urlsafe(8)}.mp3"
+                file_name = f"speech_{narration.video.title}_{file_id}.mp3"
 
                 # Create a new Audio instance
                 new_speech = Audio.objects.create(
-                    title=f"ID: {token_urlsafe(8)}",
+                    title=f"ID: {file_id}",
+                )
+
+                # Create a Django File object from API response content
+                django_file = ContentFile(audio_data, name=file_name)
+
+                # Save to model field
+                new_speech.audio_file.save(
+                    django_file.name,
+                    django_file,
+                    save=True
+                )
+
+                return new_speech
+
+    def speech_for_api(self, text: str) -> Audio:
+        if text:
+            audio_data = self._generate()
+            file_id = token_urlsafe(8)
+
+            # Returns None if file size is a certain size
+            if self.byte_count > 220:
+                file_name = f"speech_api_{file_id}.mp3"
+
+                # Create a new Audio instance
+                new_speech = Audio.objects.create(
+                    title=f"ID: {file_id}",
                 )
 
                 # Create a Django File object from API response content

@@ -81,17 +81,25 @@ def tts_view(request, narration_id):
                 text=narration.text,
                 voice=RACHEL
             )
-        else:
+        elif tts_choice == "openai":
             tts = OpenTTS(text=narration.text)
+        else:
+            tts = None
 
-        audio_obj = tts.speech_for_narration(narration)
+        tts_str = tts.__str__() if tts is not None else "No model"
+        print(tts_str)
+
+        audio_obj = tts.speech_for_narration(narration) if tts is not None else None
         narration.audio = audio_obj
         narration.save()
 
         if audio_obj is not None:
             messages.success(request, "You have generated a speech file!")
         else:
-            messages.error(request, "There was a problem generating your speech file. Please try again.")
+            messages.error(
+                request,
+                "There was a problem generating your speech file. Please choose a model and try again."
+            )
 
         return redirect("users:user_narration", narration_id=narration_id)
 

@@ -8,7 +8,7 @@ from rest_framework_api_key.permissions import BaseHasAPIKey
 from users.models import UserAPIKey
 
 
-class UserHasAPIKey(BaseHasAPIKey):
+class IsAPIKeyUser(BaseHasAPIKey):
     model = UserAPIKey
 
     def has_object_permission(self, request: HttpRequest, view: typing.Any, obj: typing.Any) -> bool:

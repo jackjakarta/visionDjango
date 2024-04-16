@@ -67,7 +67,7 @@ SITE_ID = 1
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'api.permissions.UserHasAPIKey',
+        'api.permissions.IsAPIKeyUser',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'api.permissions.APIKeyAuthentication',

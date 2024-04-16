@@ -1,9 +1,13 @@
 from django.contrib.auth.models import AnonymousUser
 from rest_framework import viewsets, status
-from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+from website.audio.tts import OpenTTS
 from website.models import Narration
-from .serializers import NarrationSerializer
+from .serializers import NarrationSerializer, TTSSerializer
 
 
 class NarrationsViewSet(viewsets.ModelViewSet):
@@ -35,3 +39,22 @@ class NarrationsViewSet(viewsets.ModelViewSet):
             return {'Location': "Yes Yes"}
         except (TypeError, KeyError):
             return {}
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def tts_create(request):
+    text = request.data.get("text")
+    if not text:
+        return Response({"error": "Please provide 'text' argument in the request."}, status=status.HTTP_400_BAD_REQUEST)
+
+    serializer = TTSSerializer(data={'text': text})
+
+    if serializer.is_valid():
+        validated_text = serializer.validated_data.get("text")
+        tts = OpenTTS(validated_text)
+        audio_obj = tts.speech_for_api()  # Model OBJ with file field
+
+        return Response({"file": audio_obj.audio_file.url}, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
