@@ -45,16 +45,58 @@ class NarrationsViewSet(viewsets.ModelViewSet):
 @permission_classes([IsAuthenticated])
 def tts_create(request):
     text = request.data.get("text")
-    if not text:
-        return Response({"error": "Please provide 'text' argument in the request."}, status=status.HTTP_400_BAD_REQUEST)
+    voice = request.data.get("voice")
+    quality = request.data.get("quality")
 
-    serializer = TTSSerializer(data={'text': text})
+    if not text:
+        return Response(
+            data={"error": "Please provide 'text' argument in the request."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    if voice not in ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'] and voice is not None:
+        return Response(
+            data={
+                "error": "Voice doesn't exist. Please choose from following voices: 'alloy', 'echo', 'fable', 'onyx', "
+                         "'nova', 'shimmer'",
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    if quality not in ["standard", "hd"] and quality is not None:
+        return Response(
+            data={"error": "Wrong 'quality' parameter. Please choose between 'fast' and 'hd'."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    serializer = TTSSerializer(
+        data={
+            'text': text,
+            'voice': voice if voice else "fable",
+            'quality': quality if quality else "standard",
+        }
+    )
 
     if serializer.is_valid():
         validated_text = serializer.validated_data.get("text")
-        tts = OpenTTS(validated_text)
-        audio_obj = tts.speech_for_api()  # Model OBJ with file field
+        validated_voice = serializer.validated_data.get("voice")
+        validated_quality = serializer.validated_data.get("quality")
 
-        return Response({"file": audio_obj.audio_file.url}, status=status.HTTP_201_CREATED)
+        tts = OpenTTS(
+            text=validated_text,
+            voice=validated_voice,
+            model="tts-1-hd" if validated_quality == "hd" else "tts-1"
+        )
+        audio_obj = tts.speech_for_api()
+
+        return Response(
+            data={
+                "model": tts.model,
+                "voice": validated_voice,
+                "text": validated_text,
+                "file": audio_obj.audio_file.url,
+            },
+            status=status.HTTP_201_CREATED
+        )
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -45,3 +45,5 @@ class NarrationSerializer(serializers.ModelSerializer):
 
 class TTSSerializer(serializers.Serializer):
     text = serializers.CharField(max_length=250, required=True)
+    voice = serializers.CharField(max_length=10, required=True)
+    quality = serializers.CharField(max_length=10, required=True)
