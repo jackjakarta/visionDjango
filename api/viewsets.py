@@ -91,8 +91,8 @@ def tts_create(request):
 
         return Response(
             data={
-                "model": tts.model,
                 "voice": validated_voice,
+                "quality": validated_quality,
                 "text": validated_text,
                 "file": audio_obj.audio_file.url,
             },
