@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AnonymousUser
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.parsers import MultiPartParser, FormParser
+# from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -13,7 +13,7 @@ from .serializers import NarrationSerializer, TTSSerializer
 class NarrationsViewSet(viewsets.ModelViewSet):
     queryset = Narration.objects.all()
     serializer_class = NarrationSerializer
-    parser_classes = (MultiPartParser, FormParser, )
+    # parser_classes = (MultiPartParser, FormParser, )
 
     def get_queryset(self):
         if not isinstance(self.request.user, AnonymousUser):
