@@ -48,6 +48,7 @@ class Narration(CustomModel):
         on_delete=models.SET_NULL,
         related_name='audios',
         related_query_name='audio',
+        blank=True,
         null=True
     )
 

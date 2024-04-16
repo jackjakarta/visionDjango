@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AnonymousUser
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-
+from rest_framework.parsers import MultiPartParser, FormParser
 from website.models import Narration
 from .serializers import NarrationSerializer
 
@@ -9,6 +9,7 @@ from .serializers import NarrationSerializer
 class NarrationsViewSet(viewsets.ModelViewSet):
     queryset = Narration.objects.all()
     serializer_class = NarrationSerializer
+    parser_classes = (MultiPartParser, FormParser, )
 
     def get_queryset(self):
         if not isinstance(self.request.user, AnonymousUser):
