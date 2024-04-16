@@ -63,6 +63,7 @@ class ElevenLabsTTS:
         self.text = text
         self.voice = voice
         self.model = model
+        self.api_key = settings.ELEVENLABS_API_KEY
         self.response = None
         self.byte_count = 0
 
@@ -72,7 +73,7 @@ class ElevenLabsTTS:
         headers = {
             "Accept": "audio/mpeg",
             "Content-Type": "application/json",
-            "xi-api-key": settings.ELEVENLABS_API_KEY
+            "xi-api-key": self.api_key
         }
 
         data = {
@@ -87,7 +88,8 @@ class ElevenLabsTTS:
         self.response = requests.post(url, json=data, headers=headers)
         self.byte_count = len(self.response.content)
 
-        print(self.response)  # DEBUG PRINT
+        print(self.byte_count)  # DEBUG PRINT
+        print(self.response.status_code)  # DEBUG PRINT
         return self.response.content
 
     def speech_for_narration(self, narration: Narration) -> Audio:
