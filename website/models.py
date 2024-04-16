@@ -45,7 +45,7 @@ class Narration(CustomModel):
     )
     audio = models.OneToOneField(
         Audio,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name='audios',
         related_query_name='audio',
         null=True
