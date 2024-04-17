@@ -1,14 +1,14 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from .viewsets import NarrationsViewSet, tts_create
+from .viewsets import NarrationViewSet, tts_create
 
 app_name = 'api'
 
 
 # API Routes
 router = routers.DefaultRouter()
-router.register(r'narrations', NarrationsViewSet, 'narrations')
+router.register(r'narrations', NarrationViewSet, 'narrations')
 
 
 urlpatterns = [
