@@ -69,12 +69,12 @@ class VideoAnalyser:
         print(f"\n**********PROMPT**********\n{prompt}\n")
 
         params = {
-            "model": "gpt-4-vision-preview",
+            "model": "gpt-4-turbo",
             "messages": prompt,
-            "max_tokens": 256,
-            "temperature": 0.6,
-            "frequency_penalty": 0.7,
-            "presence_penalty": 0.7,
+            "max_tokens": 350,
+            "temperature": 0.7,
+            "frequency_penalty": 1,
+            "presence_penalty": 1,
         }
 
         text_generation = self.client.chat.completions.create(**params)
