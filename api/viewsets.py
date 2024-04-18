@@ -16,11 +16,11 @@ class NarrationViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         if isinstance(self.request.user, AnonymousUser):
             return Response(data={"error": "403 - Forbidden."}, status=HTTP_403_FORBIDDEN)
-        else:
-            return Narration.objects.filter(user_id=self.request.user.id)
+
+        return Narration.objects.filter(user_id=self.request.user.id)
 
 
-@api_view(['POST'])
+@api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def tts_create(request):
     text = request.data.get("text")
@@ -30,7 +30,7 @@ def tts_create(request):
     if not text:
         return Response(data={"error": "Please provide 'text' argument in the request."}, status=HTTP_400_BAD_REQUEST)
 
-    if voice not in ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'] and voice is not None:
+    if voice not in ["alloy", "echo", "fable", "onyx", "nova", "shimmer"] and voice is not None:
         return Response(
             data={
                 "error": "Voice doesn't exist. Please choose from following voices: 'alloy', 'echo', 'fable', 'onyx', "

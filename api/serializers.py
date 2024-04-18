@@ -15,13 +15,13 @@ class UserSerializer(serializers.ModelSerializer):
 class AudioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Audio
-        exclude = []
+        exclude = ['id']
 
 
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
-        exclude = []
+        exclude = ['id']
 
 
 class NarrationSerializer(serializers.ModelSerializer):
