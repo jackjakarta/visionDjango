@@ -5,6 +5,11 @@ from openai import OpenAI
 from django.conf import settings
 
 
+def calculate_video_duration(frames: int, fps: int) -> float:
+    duration_seconds = frames / fps
+    return duration_seconds
+
+
 class VideoAnalyser:
     def __init__(self, video: str, custom_prompt: str = None):
         self.client = OpenAI(api_key=settings.OPENAI_API_KEY)
@@ -38,11 +43,12 @@ class VideoAnalyser:
             print("No frames to generate narration from.")
             return None
 
+        video_duration = len(self.base64frames) / 30
         prompt = [
             {
                 "role": "system",
                 "content": "You are an AI vision model that generates narrations based on a video input by analysing "
-                           "each frame.",
+                           "each frame. You follow instructions very carefully.",
             },
             {
                 "role": "user",
@@ -52,21 +58,21 @@ class VideoAnalyser:
                     "narration in plain text without any other instructions.\n\nHere's how to proceed:\n\n"
                     
                     "1. Align the narration with any specific instructions or themes provided to enhance the "
-                    "video's message.\n\n"
-                    "2. Without specific directions, create a compelling narrative that complements the visual "
-                    "flow and mood of the video.\n\n"
+                    "video's message but don't use very pretentious words unless instructed.\n"
+                    "2. Without specific directions, create a compelling but short narrative that complements the "
+                    "visual flow and mood of the video.\n\n"
                     
-                    f"The video has {len(self.base64frames)} frames at 30 fps. Adjust the output length to fit when "
-                    "spoken slowly and then and make it half the length. Please strictly adhere to this "
-                    "instruction. \n\n"
+                    f"The video is {video_duration:.2f} seconds long. Adjust the narration length to fit the video "
+                    "exactly when spoken at a slower pace. Please strictly follow this instruction. \n\n"
                     
-                    "Here are the customisation details if any available:\n\n"
-                    f"{self.custom_prompt}\n",
+                    f"Below are the customisation details if any available.\n\n{self.custom_prompt}\n",
+
+                    # Frames from video
                     *map(lambda x: {"image": x, "resize": 768}, self.base64frames[0::50]),
                 ],
             }
         ]
-        print(f"\n**********PROMPT**********\n{prompt}\n")
+        print(f"\n**********PROMPT**********\n{prompt[1].get('content')[0]}\n")
 
         params = {
             "model": "gpt-4-turbo",

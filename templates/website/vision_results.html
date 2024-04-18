@@ -43,8 +43,8 @@ Vision Result
                 </div>
             </div>
         {% else %}
-            <h4 class="text-center mb-4" style="color: #E2E2E2;">Your Narration</h4>
-            <div id="text-container"></div>
+            <h4 class="text-center mb-4" style="color: #E2E2E2;">Done! Check your projects.</h4>
+            <h5></h5>
             <div class="text-center mt-4">
                 <a class="btn btn-light btn-lg rounded-3" href="{% url 'users:profile:user_profile' user.id %}">Your Projects</a>
             </div>
@@ -55,23 +55,5 @@ Vision Result
 {% endblock %}
 
 {% block script %}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-    const text = "{{ api_response|safe }}";
-    let i = 0;
-    const container = document.getElementById('text-container');
-
-    function displayLetter() {
-        if (i < text.length) {
-            container.innerHTML += text.charAt(i); // Add the next letter
-            i++;
-            setTimeout(displayLetter, 20 + Math.random() * 40); // Randomize time
-        }
-    }
-
-    displayLetter(); // Start the animation
-});
-</script>
-
 <script type="text/javascript" src="{% static 'website/js/form-loader-custom.js' %}"></script>
 {% endblock %}
