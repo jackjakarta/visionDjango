@@ -31,8 +31,7 @@ def process_video(video_id, user_id, custom_prompt):
 
     job_id = current_task.request.id
 
-    analyser = VideoAnalyser(video=video.video_file.url, custom_prompt=custom_prompt)  # Adjust according to how video path is stored
-    analyser.read_frames()
+    analyser = VideoAnalyser(video=video.video_file.url, custom_prompt=custom_prompt)  # Adjust accordingly
     narration = analyser.generate_narration()
 
     if narration:

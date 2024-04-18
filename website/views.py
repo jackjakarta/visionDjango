@@ -24,7 +24,7 @@ def vision_view(request):
 
         if is_harmful(custom_prompt):
             messages.error(request, "Your custom prompt contains harmful language!")
-            return redirect("website:home")
+            return redirect("website:vision")
 
         if form.is_valid():
             video = form.save()
