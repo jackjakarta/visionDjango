@@ -47,32 +47,34 @@ class VideoAnalyser:
         prompt = [
             {
                 "role": "system",
-                "content": "You are an AI vision model that generates narrations based on a video input by analysing "
-                           "each frame. You follow instructions very carefully.",
+                "content": "You are an AI vision model that generates voice-overs based on a video input by analyzing "
+                           "the frames. You follow instructions very strictly.",
             },
             {
                 "role": "user",
                 "content": [
-                    "These are frames from a video. Create a voice-over narration for this video. "
-                    "The narration should be engaging and tailored to the video content. Please only give me the "
-                    "narration in plain text without any other instructions.\n\nHere's how to proceed:\n\n"
-                    
-                    "1. Align the narration with any specific instructions or themes provided to enhance the "
-                    "video's message but don't use very pretentious words unless instructed.\n"
-                    "2. Without specific directions, create a compelling but short narrative that complements the "
-                    "visual flow and mood of the video.\n\n"
-                    
-                    f"The video is {video_duration:.2f} seconds long. Adjust the narration length to fit the video "
-                    "exactly when spoken at a slower pace. Please strictly follow this instruction. \n\n"
-                    
-                    f"Below are the customisation details if any available.\n\n{self.custom_prompt}\n",
-
-                    # Frames from video
-                    *map(lambda x: {"image": x, "resize": 768}, self.base64frames[0::50]),
-                ],
+                    {
+                        "type": "text",
+                        "text": "These are frames of a video. Create a short voiceover script. Only include the "
+                                f"narration in plain text. The video is {video_duration:.2f} seconds long. Follow "
+                                "custom instructions carefully if there are any provided below.\n\n"
+                                f"Custom Instructions:\n\n{self.custom_prompt}",
+                    },
+                    *[
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": f"data:image/jpeg;base64,{frame}",
+                                "detail": "low",
+                            }
+                        } for frame in self.base64frames[0::50]
+                    ],
+                ]
             }
         ]
-        print(f"\n**********PROMPT**********\n{prompt[1].get('content')[0]}\n")
+
+        debug_print = prompt[1].get("content")[0]
+        print(f"\n**********PROMPT**********\n{debug_print}\n")
 
         params = {
             "model": "gpt-4-turbo",

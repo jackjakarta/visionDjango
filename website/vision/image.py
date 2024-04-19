@@ -7,20 +7,13 @@ OPENAI_API_KEY = config("OPENAI_API_KEY")
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
-prompt_vision = ""
-
 
 class ImageInterpret:
     def __init__(self, model="gpt-4-vision-preview"):
         self.client = client
         self.model = model
-        self.messages = [
-            {
-                "role": "system",
-                "content": prompt_vision
-            }
-        ]
         self.prompt = None
+        self.messages = []
         self.completion = None
         self.image_url = None
         self.image_file = None

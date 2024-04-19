@@ -2,14 +2,14 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 from vision_app.models import CustomModel
-from .utils import validate_video_extension
+from .utils.validators import validate_video_extension, validate_video_size
 
 AuthUser = get_user_model()
 
 
 class Video(CustomModel):
     title = models.CharField(max_length=100)
-    video_file = models.FileField(upload_to='videos/', validators=[validate_video_extension])
+    video_file = models.FileField(upload_to='videos/', validators=[validate_video_extension, validate_video_size])
 
     def __str__(self):
         return self.title
