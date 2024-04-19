@@ -91,8 +91,8 @@ docker exec -it mysql-db bash
     python3 manage.py collectstatic
     ```
    
-   - You don't need to run this if your using the development server and serving static files locally. Only if you use 
-   S3 storage or a production server (e.g. gunicorn). Check `.env.default` file.
+   **You don't need to run this if your using the development server and serving static files locally. Only if you use 
+   S3 storage or a production server (e.g. gunicorn). Check `.env.default` file.*
 
 
 6. Run the development server.
