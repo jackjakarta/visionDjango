@@ -10,7 +10,7 @@ This Django app uses GPT-4 and OpenCV to analyze video frames, generating a cont
 
 - [Features](#features)
 - [Installation](#installation)
-  - [MySQL Database]()
+  - [MySQL Database](#database-setup)
   - [Django Server](#django-server)
   - [Celery and Redis](#celery-and-redis)
 - [Technologies](#technologies-used)
