@@ -17,10 +17,8 @@ crispy-bootstrap5==2024.2
 cryptography==42.0.5
 defusedxml==0.8.0rc2
 distro==1.9.0
-dj-database-url==2.1.0
 Django==5.0.4
 django-crispy-forms==2.1
-django-heroku==0.3.1
 django-redis==5.4.0
 django-storages==1.14.2
 djangorestframework==3.15.1
@@ -41,7 +39,6 @@ opencv-python==4.9.0.80
 packaging==24.0
 pillow==10.3.0
 prompt-toolkit==3.0.43
-psycopg2==2.9.9
 pycparser==2.21
 pydantic==2.6.3
 pydantic_core==2.16.3
