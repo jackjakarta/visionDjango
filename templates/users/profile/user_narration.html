@@ -9,58 +9,124 @@ Project: {{ narration.video.title }}
 
 {% block style %}
 <link rel="stylesheet" href="{% static 'website/css/form-loader.css' %}">
+<style>
+.audio-player {
+  width: 100%; /* Responsive width */
+  outline: none; /* Remove default focus outline */
+}
+
+/* Example to customize the progress bar */
+.audio-player::-webkit-slider-thumb {
+  background: #007bff; /* Bootstrap primary color */
+}
+
+.audio-player::-webkit-progress-value {
+  background-color: #007bff; /* Bootstrap primary color */
+}
+
+.audio-player::-webkit-progress-bar {
+  background-color: #e9ecef; /* Bootstrap light gray */
+}
+</style>
 {% endblock %}
 
 
 {% block content %}
 <div class="container mt-4">
   <div class="form-container">
+
     {% if narration %}
       <h2 class="text-center mb-4" style="color: #E2E2E2;">
         {{ narration.video.title|default:"No Title" }}
       </h2>
-      <p>{{ narration.text }}</p>
-    <div class="text-center mt-3">
-      {% if not narration.audio %}
-      <form id="myForm" action="{% url 'website:tts' narration.id %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <select name="tts_choice" id="tts_choice" class="form-control" aria-label="Default select example">
-            <option selected>Select TTS Model</option>
-            <option value="openai">OpenAI TTS</option>
-            <option value="elevenlabs">ElevenLabs TTS (not working)</option>
-        </select>
-        <button id="submitBtn" onclick="showLoadingScreen()" class="btn btn-light btn-sm rounded-3 mt-3" type="submit">Generate Speech File</button>
-        <div class="text-center mt-3">
-            <div id="loading-container" style="display: none;">
-                <div id="spinner-container">
-                    <div class="dot-spinner">
-                        <div class="dot-spinner__dot"></div>
-                        <div class="dot-spinner__dot"></div>
-                        <div class="dot-spinner__dot"></div>
-                        <div class="dot-spinner__dot"></div>
-                        <div class="dot-spinner__dot"></div>
-                        <div class="dot-spinner__dot"></div>
-                        <div class="dot-spinner__dot"></div>
-                        <div class="dot-spinner__dot"></div>
+      <!--Video-->
+        <div class="row justify-content-center mt-3">
+        <div class="col-lg-8">
+          <div class="card">
+              <div class="card-body">
+                <div class="embed-responsive embed-responsive-16by9 mt-4">
+                    <video class="embed-responsive-item" style="width: 100%; height: 100%;" src="{{ narration.video.video_file.url }}" controls></video>
+                </div>
+              </div>
+          </div>
+        </div>
+    </div>
+
+    <!--Audio-->
+    <div class="mt-3">
+
+        {% if not narration.audio %}
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-7">
+                <div class="container">
+                    <h5 class="mt-3">Generate Text-To-Speech File</h5>
+              <form id="myForm" class="form" action="{% url 'website:tts' narration.id %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                  <div class="form-group">
+                      <label for="tts_choice">with OpenAI Whisper / ElevenLabs Turbo V2</label>
+                    <select name="tts_choice" id="tts_choice" class="form-control mt-3" aria-label="Default select example">
+                        <option selected>Choose Model</option>
+                        <option value="openai">OpenAI TTS-1 (Male - Fable (UK)</option>
+                        <option value="elevenlabs">ElevenLabs Turbo V2 (Female - Rachel (US)</option>
+                    </select>
+                </div>
+                <button id="submitBtn" onclick="showLoadingScreen()" class="btn btn-light btn-sm rounded-3 mt-2" type="submit">Generate Speech File</button>
+
+                <!--Loader-->
+                <div class="text-center mt-3">
+                    <div id="loading-container" style="display: none;">
+                        <div id="spinner-container">
+                            <div class="dot-spinner">
+                                <div class="dot-spinner__dot"></div>
+                                <div class="dot-spinner__dot"></div>
+                                <div class="dot-spinner__dot"></div>
+                                <div class="dot-spinner__dot"></div>
+                                <div class="dot-spinner__dot"></div>
+                                <div class="dot-spinner__dot"></div>
+                                <div class="dot-spinner__dot"></div>
+                                <div class="dot-spinner__dot"></div>
+                            </div>
+                        </div>
                     </div>
+                    </div>
+              </form>
+            </div>
+            </div>
+        </div>
+    </div>
+
+      {% else %}
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <h5 class="mt-3">Text-To-Speech File</h5>
+
+                <audio controls class="audio-player mt-2">
+                    <source src="{{ narration.audio.audio_file.url }}" type="audio/mp3">
+                </audio>
+            </div>
+        </div>
+
+      {% endif %}
+
+    <!--Narration-->
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <h5 class="mt-4">Generated Text From Video</h5>
+            <div class="card mt-3">
+                <div class="card-body text-light fs-6">
+                    <p class="text-start">{{ narration.text }}</p>
                 </div>
             </div>
-            </div>
-      </form>
-      {% else %}
-        <div>
-            <audio controls>
-                <source src="{{ narration.audio.audio_file.url }}" type="audio/mp3">
-            </audio>
         </div>
-      {% endif %}
-  </div>
-      <div class="embed-responsive embed-responsive-16by9 mt-4">
-        <video class="embed-responsive-item" style="width: 100%; height: 100%;" src="{{ narration.video.video_file.url }}" controls></video>
-      </div>
-    {% endif %}
+    </div>
+
+{% endif %}
+
   </div>
 </div>
+
 {% endblock %}
 
 {% block script %}
@@ -72,6 +138,19 @@ document.getElementById('myForm').addEventListener('submit', function(e) {
     // Disable the submit button to prevent multiple submissions
     const submitBtn = document.getElementById('submitBtn');
     submitBtn.style.display = 'none';
+});
+</script>
+
+<script>
+document.querySelector('.play-button').addEventListener('click', function() {
+  var audio = document.querySelector('.audio-player');
+  if (this.classList.contains('playing')) {
+    this.classList.remove('playing');
+    audio.pause();
+  } else {
+    this.classList.add('playing');
+    audio.play();
+  }
 });
 </script>
 {% endblock %}

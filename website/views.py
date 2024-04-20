@@ -89,24 +89,24 @@ def tts_view(request, narration_id):
         else:
             messages.error(
                 request,
-                "There was a problem generating your speech file. Please choose a model and try again."
+                "There was a problem generating your file. Please choose a model and try again."
             )
 
         return redirect("users:user_narration", narration_id=narration_id)
-
     else:
         return HttpResponse("Method not allowed", status=405)
 
 
 # Email Send Test Function
 def send_email_view(request):
-    if request.user.is_superuser:
-        send_email_test(
-            name="John Elk",
-            message="Why so serious? Testing the email functionality.",
-            reply_to="john@gmail.com"
-        )
-        messages.success(request, "Email sent!")
-        return redirect("website:vision")
-    else:
+    if not request.user.is_superuser:
         return HttpResponse("Forbidden", status=403)
+
+    send_email_test(
+        name="John Elk",
+        message="Testing the email functionality.",
+        reply_to="john@gmail.com"
+    )
+
+    messages.success(request, "Email sent!")
+    return redirect("website:vision")
