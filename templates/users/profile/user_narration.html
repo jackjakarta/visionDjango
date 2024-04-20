@@ -63,7 +63,7 @@ Project: {{ narration.video.title }}
               <form id="myForm" class="form" action="{% url 'website:tts' narration.id %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                   <div class="form-group">
-                      <label for="tts_choice">with OpenAI Whisper / ElevenLabs Turbo V2</label>
+                      <label for="tts_choice">with OpenAI TTS-1 / ElevenLabs Turbo V2</label>
                     <select name="tts_choice" id="tts_choice" class="form-control mt-3" aria-label="Default select example">
                         <option selected>Choose Model</option>
                         <option value="openai">OpenAI TTS-1 (Male - Fable (UK)</option>
