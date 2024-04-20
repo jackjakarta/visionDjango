@@ -35,9 +35,7 @@ def vision_view(request):
             job_id = process_video.delay(video_id, user_id, custom_prompt)
 
             return render(request, "website/vision_results.html", {
-                "api_response": "We are working on it...",
                 "job_id": job_id,
-                "refresh_button": True,
             })
     else:
         form = VideoForm()
@@ -53,15 +51,10 @@ def get_vision_results(request, job_id):
 
     if result is not None:
         messages.success(request, "Your narration is ready.")
-        return render(request, "website/vision_results.html", {
-            "api_response": result,
-            "refresh_button": False,
-        })
+        return redirect("users:profile:user_profile", user_id=request.user.id)
     else:
         return render(request, "website/vision_results.html", {
-            "api_response": "We are still working on it...",
             "job_id": job_id,
-            "refresh_button": True,
         })
 
 
@@ -86,9 +79,7 @@ def tts_view(request, narration_id):
         else:
             tts = None
 
-        tts_str = tts.__str__() if tts is not None else "No model"
-        print(tts_str)
-
+        # Save Speech to Narration
         audio_obj = tts.speech_for_narration(narration) if tts is not None else None
         narration.audio = audio_obj
         narration.save()

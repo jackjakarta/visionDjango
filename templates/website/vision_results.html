@@ -15,40 +15,32 @@ Vision Result
 
 <div class="container mt-4">
     <div class="form-container">
-        {% if refresh_button %}
-            <div class="text-center">
-                <form action="{% url 'website:get_results' job_id %}" id="myForm">
-                    {% csrf_token %}
-                    <h4 id="myTitle" class="mb-4" style="color: #E2E2E2;">{{ api_response }}</h4>
+        <!--Form-->
+        <div class="text-center">
+            <form action="{% url 'website:get_results' job_id %}" id="myForm">
+                {% csrf_token %}
+                <h4 id="myTitle" class="mb-4" style="color: #E2E2E2;">We are working on it...</h4>
+                <button class="btn btn-light btn-lg rounded-3" id="submitBtn" onclick="showLoadingScreen()" type="submit">Check Process</button>
+            </form>
+        </div>
 
-                    <button class="btn btn-light btn-lg rounded-3" id="submitBtn" onclick="showLoadingScreen()" type="submit">Check Process</button>
-                </form>
-            </div>
-
-            <!--Loader-->
-            <div class="text-center mt-4">
-                <div id="loading-container" style="display: none;">
-                    <div id="spinner-container">
-                        <div class="dot-spinner">
-                            <div class="dot-spinner__dot"></div>
-                            <div class="dot-spinner__dot"></div>
-                            <div class="dot-spinner__dot"></div>
-                            <div class="dot-spinner__dot"></div>
-                            <div class="dot-spinner__dot"></div>
-                            <div class="dot-spinner__dot"></div>
-                            <div class="dot-spinner__dot"></div>
-                            <div class="dot-spinner__dot"></div>
-                        </div>
+        <!--Loader-->
+        <div class="text-center mt-4">
+            <div id="loading-container" style="display: none;">
+                <div id="spinner-container">
+                    <div class="dot-spinner">
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
                     </div>
                 </div>
             </div>
-        {% else %}
-            <h4 class="text-center mb-4" style="color: #E2E2E2;">Done! Check your projects.</h4>
-            <h5></h5>
-            <div class="text-center mt-4">
-                <a class="btn btn-light btn-lg rounded-3" href="{% url 'users:profile:user_profile' user.id %}">Your Projects</a>
-            </div>
-        {% endif %}
+        </div>
     </div>
 </div>
 

@@ -5,11 +5,6 @@ from openai import OpenAI
 from django.conf import settings
 
 
-def calculate_video_duration(frames: int, fps: int) -> float:
-    duration_seconds = frames / fps
-    return duration_seconds
-
-
 class VideoAnalyser:
     def __init__(self, video: str, custom_prompt: str = None):
         self.client = OpenAI(api_key=settings.OPENAI_API_KEY)
