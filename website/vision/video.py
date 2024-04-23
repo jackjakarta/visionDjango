@@ -42,8 +42,8 @@ class VideoAnalyser:
         prompt = [
             {
                 "role": "system",
-                "content": "You are an AI vision model that generates voice-overs based on a video input by analyzing "
-                           "the frames. You follow instructions very strictly.",
+                "content": "You are an AI vision model that generates voice-overs based by analyzing the frames of the video which are "
+                           "provided to you as images. You follow instructions very strictly.",
             },
             {
                 "role": "user",
@@ -51,11 +51,12 @@ class VideoAnalyser:
                     {
                         "type": "text",
                         "text": "As a professional scriptwriter, you are tasked with creating a compelling voiceover script for a video. "
-                                "You are to analyse the video frames provided and create the response based on the content of the video. "
-                                "Please only give me the voiceover in plain text without any other instructions. The video runs for "
-                                f"{video_duration:.2f} seconds. The desired tone for the voiceover should be casual, like one used in a "
-                                "youtube video unless instructed otherwise. Please refer to the provided custom instructions for additional "
-                                f"guidance. Custom Instructions:\n\n{self.custom_prompt}\n\nExample Voiceover Script:\n\n{EXAMPLE_VOICEOVER}\n",
+                                "Follow these steps:\n\n1. You are to analyse the video frames provided.\n2. Create the voiceover based "
+                                "on the content and length of the video.\n\nPlease only give me the voiceover in plain text without any "
+                                f"other instructions. The video runs for {video_duration:.2f} seconds. The desired tone for the voiceover "
+                                "should be casual, like one used in a youtube video unless instructed otherwise. Please refer to the provided "
+                                f"custom instructions for additional guidance. Custom Instructions:\n\n{self.custom_prompt}\n\nExample "
+                                f"Voiceover Script:\n\n{EXAMPLE_VOICEOVER}\n",
                     },
                     *[
                         {
