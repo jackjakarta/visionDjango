@@ -3,7 +3,7 @@ import base64
 import cv2
 from openai import OpenAI
 from django.conf import settings
-
+from .constants import EXAMPLE_VOICEOVER
 
 class VideoAnalyser:
     def __init__(self, video: str, custom_prompt: str = None):
@@ -50,10 +50,12 @@ class VideoAnalyser:
                 "content": [
                     {
                         "type": "text",
-                        "text": "These are frames of a video. Create a short voiceover script. Only include the "
-                                f"narration in plain text. The video is {video_duration:.2f} seconds long. Follow "
-                                "custom instructions carefully if there are any provided below.\n\n"
-                                f"Custom Instructions:\n\n{self.custom_prompt}",
+                        "text": "As a professional scriptwriter, you are tasked with creating a compelling voiceover script for a video. "
+                                "You are to analyse the video frames provided and create the response based on the content of the video. "
+                                "Please only give me the voiceover in plain text without any other instructions. The video runs for "
+                                f"{video_duration:.2f} seconds. The desired tone for the voiceover should be casual, like one used in a "
+                                "youtube video unless instructed otherwise. Please refer to the provided custom instructions for additional "
+                                f"guidance. Custom Instructions:\n\n{self.custom_prompt}\n\nExample Voiceover Script:\n\n{EXAMPLE_VOICEOVER}\n",
                     },
                     *[
                         {
@@ -74,8 +76,8 @@ class VideoAnalyser:
         params = {
             "model": "gpt-4-turbo",
             "messages": prompt,
-            "max_tokens": 350,
-            "temperature": 0.7,
+            "max_tokens": 800,
+            "temperature": 0.8,
             "frequency_penalty": 1,
             "presence_penalty": 1,
         }
