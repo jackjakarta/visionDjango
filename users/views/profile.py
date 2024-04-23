@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, Http404
 from libgravatar import Gravatar
 
 from users.models import Profile
@@ -47,3 +47,7 @@ def user_narration(request, narration_id):
     else:
         messages.error(request, "You can't access this resource.")
         return redirect("website:home")
+
+
+def user_api_key(request, user_id):
+    raise Http404

@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.http import Http404
 from django.shortcuts import render, redirect
 
 from users.forms import RegisterForm
@@ -50,3 +51,7 @@ def register_view(request):
     return render(request, "users/register.html", {
         "form": form
     })
+
+
+def get_api_key(request):
+    raise Http404

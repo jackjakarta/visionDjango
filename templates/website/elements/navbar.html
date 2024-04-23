@@ -13,12 +13,24 @@
                   <button class="btn btn-default rounded-3 dropdown-toggle me-2" type="button"
                    data-bs-toggle="dropdown" aria-expanded="false"><b>{{ user }}</b></button>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{% url 'users:profile:user_profile' user.id %}">Projects</a></li>
+                      <li><a class="dropdown-item" href="{% url 'users:profile:user_profile' user.id %}">Profile</a></li>
+                        <li><a class="dropdown-item" href="{% url 'users:profile:user_profile' user.id %}">Projects</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="{% url 'users:profile:user_api_key' user.id %}">API Key</a></li>
+                      <li><a class="dropdown-item" href="{% url 'users:profile:user_api_key' user.id %}">Documentation</a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="{% url 'users:logout' %}">Logout</a></li>
                   </ul>
                 </div>
-          <a href="{% url 'website:vision' %}" class="btn btn-default rounded-3 me-2"><img src="{% static 'website/img/plus-logo.png' %}" class="img-fluid" alt="" width="20" height="20"></a>
+          <div class="dropdown">
+              <button class="btn btn-default rounded-3 dropdown-toggle me-2" type="button"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                <a href="{% url 'website:vision' %}"><img src="{% static 'website/img/plus-logo.png' %}" class="img-fluid" alt="" width="20" height="20"></a>
+                  </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'website:vision' %}">Create project</a></li>
+              </ul>
+          </div>
           {% else %}
             <a class="btn btn-default rounded-3 me-2" href="{% url 'users:login' %}"><b>Login</b></a>
             <a class="btn btn-default rounded-3 me-2" href="{% url 'users:register' %}"><b>Sign Up</b></a>
