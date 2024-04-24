@@ -1,9 +1,12 @@
 import base64
 
 import cv2
-from openai import OpenAI
+from decouple import config
 from django.conf import settings
+from openai import OpenAI
+
 from .constants import EXAMPLE_VOICEOVER
+
 
 class VideoAnalyser:
     def __init__(self, video: str, custom_prompt: str = None):
@@ -34,7 +37,7 @@ class VideoAnalyser:
     def generate_narration(self):
         self._read_frames()
 
-        if self.base64frames is None or not self.base64frames:
+        if not self.base64frames:
             print("No frames to generate narration from.")
             return None
 
@@ -55,7 +58,7 @@ class VideoAnalyser:
                                 "on the content and length of the video.\n\nPlease only give me the voiceover in plain text without any "
                                 f"other instructions. The video runs for {video_duration:.2f} seconds. The desired tone for the voiceover "
                                 "should be casual, like one used in a youtube video unless instructed otherwise. Please refer to the provided "
-                                f"custom instructions for additional guidance. Custom Instructions:\n\n{self.custom_prompt}\n\nExample "
+                                f"custom instructions for additional guidance. Custom Instructions: {self.custom_prompt}\n\nExample "
                                 f"Voiceover Script:\n\n{EXAMPLE_VOICEOVER}\n",
                     },
                     *[
@@ -75,12 +78,13 @@ class VideoAnalyser:
         print(f"\n**********PROMPT**********\n{debug_print}\n")
 
         params = {
-            "model": "gpt-4-turbo",
             "messages": prompt,
-            "max_tokens": 800,
-            "temperature": 0.8,
-            "frequency_penalty": 1,
-            "presence_penalty": 1,
+            "model": config("VISION_MODEL", default="gpt-4-turbo"),
+            "max_tokens": config("MODEL_MAX_TOKENS", default=1024, cast=int),
+            "temperature": config("MODEL_TEMPERATURE", default=0.8, cast=float),
+            "frequency_penalty": config("MODEL_FREQUENCY_PENALTY", default=0.4, cast=float),
+            "presence_penalty": config("MODEL_PRESENCE_PENALTY", default=0.4, cast=float),
+            "top_p": config("MODEL_TOP_P", default=1, cast=float),
         }
 
         text_generation = self.client.chat.completions.create(**params)
