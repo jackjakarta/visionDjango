@@ -9,14 +9,14 @@ from .constants import EXAMPLE_VOICEOVER
 
 
 class VideoAnalyser:
-    def __init__(self, video: str, custom_prompt: str = None):
+    def __init__(self, video: str, custom_prompt: str | None = None) -> None:
         self.client = OpenAI(api_key=settings.OPENAI_API_KEY)
         self.video = cv2.VideoCapture(video)
         self.base64frames = None
         self.generated_text = None
         self.custom_prompt = custom_prompt
 
-    def _read_frames(self):
+    def _read_frames(self) -> list:
         if not self.video.isOpened():
             print("Error: Couldn't open video file.")
             return None
@@ -34,7 +34,7 @@ class VideoAnalyser:
 
         return self.base64frames
 
-    def generate_narration(self):
+    def generate_narration(self) -> str:
         self._read_frames()
 
         if not self.base64frames:
@@ -66,7 +66,7 @@ class VideoAnalyser:
                             "type": "image_url",
                             "image_url": {
                                 "url": f"data:image/jpeg;base64,{frame}",
-                                "detail": "low",
+                                "detail": config("VISION_DETAIL", default="low"),
                             }
                         } for frame in self.base64frames[0::50]
                     ],

@@ -12,7 +12,11 @@ AuthUser = get_user_model()
 
 @receiver(post_save, sender=AuthUser)
 def create_profile(sender, instance, created, **kwargs):
+    """
+    Creates profile for the user on creation.
+    """
     print("\nSignals post_save was caught!")
+
     if created:
         Profile(user=instance).save()
         print("Created profile successfully!")
@@ -20,7 +24,11 @@ def create_profile(sender, instance, created, **kwargs):
 
 @receiver(pre_save, sender=AuthUser)
 def inactivate_user(instance, **kwargs):
+    """
+    Inactivate user on creation if it's not a social user.
+    """
     is_social_user = hasattr(instance, 'is_social_auth') and instance.is_social_auth is True
+
     if not instance.pk and not is_social_user:
         instance.is_active = False
         instance.password = None
@@ -28,8 +36,15 @@ def inactivate_user(instance, **kwargs):
 
 @receiver(post_save, sender=AuthUser)
 def create_activation(sender, instance, created, **kwargs):
+    """
+    Create an Activation object and send an activation email when a new user is created.
+    """
+    if not isinstance(instance, AuthUser):
+        return
+    
     print('!!! Signal post_save was triggered!')
     is_social_user = hasattr(instance, 'is_social_auth') and instance.is_social_auth is True
+    
     try:
         with transaction.atomic():
             if created:
