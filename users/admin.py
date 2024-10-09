@@ -52,7 +52,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (_("Avatar"), {"fields": ("display_avatar", "avatar", )}),
-        (_("Contact Information"), {"fields": ("user_name", "user", "phone", "city", "country", )}),
+        (_("Contact Information"), {"fields": ("user_name", "user", "city", "country", )}),
     )
 
     def user_name(self, obj):
