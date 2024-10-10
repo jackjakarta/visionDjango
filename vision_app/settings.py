@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 from secrets import token_urlsafe
 
+import dj_database_url
 from decouple import config
 
 
@@ -120,16 +121,10 @@ WSGI_APPLICATION = 'vision_app.wsgi.application'
 # Database Settings
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default=3306, cast=int),  # Default MySQL port
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD')
-    }
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL')
+    )
 }
-
 
 # Password Validation
 
