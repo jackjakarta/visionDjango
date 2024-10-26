@@ -10,13 +10,13 @@ class ActivationMiddleware:
 
     @staticmethod
     def process_view(request, view_func, view_args, view_kwargs):
-        token = view_kwargs.get('token')
+        token = view_kwargs.get("token")
         activation = get_object_or_404(Activation, token=token, activated_at=None)
-        reset_token_route = reverse('users:activation:reset_token', args=(token, ))
+        reset_token_route = reverse("users:activation:reset_token", args=(token,))
         is_reset_token_request = reset_token_route == request.path
 
         if activation.expires_at < timezone.now():
             if not is_reset_token_request:
                 return redirect(reset_token_route)
         elif is_reset_token_request:
-            raise Http404('Token is still active!')
+            raise Http404("Token is still active!")

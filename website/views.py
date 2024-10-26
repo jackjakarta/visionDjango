@@ -34,15 +34,23 @@ def vision_view(request):
             # Process video / Start celery task
             job_id = process_video.delay(video_id, user_id, custom_prompt)
 
-            return render(request, "website/vision_results.html", {
-                "job_id": job_id,
-            })
+            return render(
+                request,
+                "website/vision_results.html",
+                {
+                    "job_id": job_id,
+                },
+            )
     else:
         form = VideoForm()
 
-    return render(request, "website/vision.html", {
-        'form': form,
-    })
+    return render(
+        request,
+        "website/vision.html",
+        {
+            "form": form,
+        },
+    )
 
 
 @user_is_authenticated
@@ -53,9 +61,13 @@ def get_vision_results(request, job_id):
         messages.success(request, "Your narration is ready.")
         return redirect("users:profile:user_profile", user_id=request.user.id)
     else:
-        return render(request, "website/vision_results.html", {
-            "job_id": job_id,
-        })
+        return render(
+            request,
+            "website/vision_results.html",
+            {
+                "job_id": job_id,
+            },
+        )
 
 
 @user_is_authenticated
@@ -70,10 +82,7 @@ def tts_view(request, narration_id):
         tts_choice = request.POST.get("tts_choice")
 
         if tts_choice == "elevenlabs":
-            tts = ElevenLabsTTS(
-                text=narration.text,
-                voice=RACHEL
-            )
+            tts = ElevenLabsTTS(text=narration.text, voice=RACHEL)
         elif tts_choice == "openai":
             tts = OpenTTS(text=narration.text)
         else:
@@ -89,7 +98,7 @@ def tts_view(request, narration_id):
         else:
             messages.error(
                 request,
-                "There was a problem generating your file. Please choose a model and try again."
+                "There was a problem generating your file. Please choose a model and try again.",
             )
 
         return redirect("users:user_narration", narration_id=narration_id)
@@ -105,7 +114,7 @@ def send_email_view(request):
     send_email_test(
         name="John Elk",
         message="Testing the email functionality.",
-        reply_to="john@gmail.com"
+        reply_to="john@gmail.com",
     )
 
     messages.success(request, "Email sent!")

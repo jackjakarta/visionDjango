@@ -2,25 +2,22 @@
 # import secrets
 # from django.core.files.base import ContentFile
 
-USER_FIELDS = ['username', 'email', 'first_name', 'last_name']
+USER_FIELDS = ["username", "email", "first_name", "last_name"]
 
 
 def create_user(strategy, details, backend, user=None, *args, **kwargs):
     if user:
-        return {'is_new': False}
+        return {"is_new": False}
 
     fields = dict(
         (name, kwargs.get(name, details.get(name)))
-        for name in backend.setting('USER_FIELDS', USER_FIELDS)
+        for name in backend.setting("USER_FIELDS", USER_FIELDS)
     )
 
     if not fields:
         return
 
-    return {
-        'is_new': True,
-        'user': strategy.create_user(**fields, is_social_auth=True)
-    }
+    return {"is_new": True, "user": strategy.create_user(**fields, is_social_auth=True)}
 
 
 # def get_profile_picture(backend, user, response, is_new, *args, **kwargs):

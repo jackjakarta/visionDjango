@@ -14,11 +14,7 @@ from .utils.constants import ACTIVATION_AVAILABILITY
 
 class AuthUser(AbstractUser):
     username = None
-    email = models.EmailField(
-        verbose_name="email",
-        max_length=250,
-        unique=True
-    )
+    email = models.EmailField(verbose_name="email", max_length=250, unique=True)
     password = models.CharField(_("password"), max_length=128, null=True, blank=False)
 
     USERNAME_FIELD = "email"
@@ -33,22 +29,20 @@ class AuthUser(AbstractUser):
         return self.__str__()
 
 
-AVAILABILITY = {
-    ACTIVATION_AVAILABILITY["unit"]: ACTIVATION_AVAILABILITY["value"]
-}
+AVAILABILITY = {ACTIVATION_AVAILABILITY["unit"]: ACTIVATION_AVAILABILITY["value"]}
 
 
 class Activation(models.Model):
-    user = models.OneToOneField(AuthUser, related_name="activation", on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        AuthUser, related_name="activation", on_delete=models.CASCADE
+    )
     token = models.CharField(
         max_length=64,
         null=True,
         unique=True,
         default=None,
     )
-    expires_at = models.DateTimeField(
-        default=None
-    )
+    expires_at = models.DateTimeField(default=None)
     activated_at = models.DateTimeField(default=None, null=True)
 
     def save(self, *args, **kwargs):
@@ -68,7 +62,7 @@ class Profile(CustomModel):
         max_length=120,
         default=None,
         blank=True,
-        null=True
+        null=True,
     )
 
     def __str__(self):
@@ -80,7 +74,5 @@ class Profile(CustomModel):
 
 class UserAPIKey(AbstractAPIKey):
     user = models.ForeignKey(
-        AuthUser,
-        on_delete=models.CASCADE,
-        related_name="api_keys"
+        AuthUser, on_delete=models.CASCADE, related_name="api_keys"
     )

@@ -9,23 +9,25 @@ AuthUser = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = AuthUser
-        fields = ['email']
+        fields = ["email"]
 
 
 class AudioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Audio
-        exclude = ['id']
+        exclude = ["id"]
 
 
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
-        exclude = ['id']
+        exclude = ["id"]
 
 
 class NarrationSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(queryset=AuthUser.objects.all(), required=False)
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=AuthUser.objects.all(), required=False
+    )
     audio = AudioSerializer()
     video = VideoSerializer()
 
@@ -38,7 +40,7 @@ class NarrationSerializer(serializers.ModelSerializer):
         user = instance.user
 
         if user:
-            representation['user'] = UserSerializer(user).data
+            representation["user"] = UserSerializer(user).data
 
         return representation
 

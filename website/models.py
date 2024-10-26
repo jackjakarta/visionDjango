@@ -9,7 +9,9 @@ AuthUser = get_user_model()
 
 class Video(CustomModel):
     title = models.CharField(max_length=100)
-    video_file = models.FileField(upload_to='videos/', validators=[validate_video_extension, validate_video_size])
+    video_file = models.FileField(
+        upload_to="videos/", validators=[validate_video_extension, validate_video_size]
+    )
 
     def __str__(self):
         return self.title
@@ -20,7 +22,7 @@ class Video(CustomModel):
 
 class Audio(CustomModel):
     title = models.CharField(max_length=100, blank=True, null=True)
-    audio_file = models.FileField(upload_to='audio/', null=True)
+    audio_file = models.FileField(upload_to="audio/", null=True)
 
     def __str__(self):
         return self.title
@@ -34,22 +36,22 @@ class Narration(CustomModel):
     user = models.ForeignKey(
         AuthUser,
         on_delete=models.CASCADE,
-        related_name='narrations',
-        related_query_name='narration'
+        related_name="narrations",
+        related_query_name="narration",
     )
     video = models.OneToOneField(
         Video,
         on_delete=models.CASCADE,
-        related_name='videos',
-        related_query_name='video'
+        related_name="videos",
+        related_query_name="video",
     )
     audio = models.OneToOneField(
         Audio,
         on_delete=models.SET_NULL,
-        related_name='audios',
-        related_query_name='audio',
+        related_name="audios",
+        related_query_name="audio",
         blank=True,
-        null=True
+        null=True,
     )
 
     def __str__(self):

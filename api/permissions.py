@@ -11,7 +11,9 @@ from users.models import UserAPIKey
 class IsAPIKeyUser(BaseHasAPIKey):
     model = UserAPIKey
 
-    def has_object_permission(self, request: HttpRequest, view: typing.Any, obj: typing.Any) -> bool:
+    def has_object_permission(
+        self, request: HttpRequest, view: typing.Any, obj: typing.Any
+    ) -> bool:
         # First, call the base implementation to ensure the API key itself is valid
         if not super().has_permission(request, view):
             return False
@@ -35,14 +37,14 @@ class IsAPIKeyUser(BaseHasAPIKey):
 
 class APIKeyAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
-        key = request.META.get('HTTP_X_API_KEY')  # Adjust the header name as needed
+        key = request.META.get("HTTP_X_API_KEY")  # Adjust the header name as needed
         if not key:
             return None
         try:
             api_key = UserAPIKey.objects.get_from_key(key)
             if api_key is None or not api_key.user:
-                raise exceptions.AuthenticationFailed('No such API key')
+                raise exceptions.AuthenticationFailed("No such API key")
 
             return api_key.user, api_key  # Return the user and the API key object
         except UserAPIKey.DoesNotExist:
-            raise exceptions.AuthenticationFailed('No such API key')
+            raise exceptions.AuthenticationFailed("No such API key")

@@ -48,9 +48,7 @@ def register_view(request):
     else:
         form = RegisterForm()
 
-    return render(request, "users/register.html", {
-        "form": form
-    })
+    return render(request, "users/register.html", {"form": form})
 
 
 def get_api_key(request):
