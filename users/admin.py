@@ -10,9 +10,21 @@ from .models import AuthUser, Profile, UserAPIKey
 @admin.register(AuthUser)
 class AuthUserAdmin(BaseUserAdmin):
     list_display = ("email", "first_name", "last_name", "is_staff", "is_superuser")
-    list_filter = ("is_staff", "is_superuser", )
-    ordering = ("email", "first_name", "last_name", "is_staff", )
-    search_fields = ("email", "first_name", "last_name", )
+    list_filter = (
+        "is_staff",
+        "is_superuser",
+    )
+    ordering = (
+        "email",
+        "first_name",
+        "last_name",
+        "is_staff",
+    )
+    search_fields = (
+        "email",
+        "first_name",
+        "last_name",
+    )
 
     fieldsets = (
         (None, {"fields": ("email", "password")}),
@@ -36,7 +48,13 @@ class AuthUserAdmin(BaseUserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("first_name", "last_name", "email", "password1", "password2"),
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "email",
+                    "password1",
+                    "password2",
+                ),
             },
         ),
     )
@@ -44,15 +62,50 @@ class AuthUserAdmin(BaseUserAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ("user", "display_avatar", "city", "country", "created_at", )
-    list_filter = ("country", )
-    ordering = ("user", "country", "created_at", )
-    search_fields = ("city", "country", )
-    readonly_fields = ("display_avatar", "user_name", "user", )
+    list_display = (
+        "user",
+        "display_avatar",
+        "city",
+        "country",
+        "created_at",
+    )
+    list_filter = ("country",)
+    ordering = (
+        "user",
+        "country",
+        "created_at",
+    )
+    search_fields = (
+        "city",
+        "country",
+    )
+    readonly_fields = (
+        "display_avatar",
+        "user_name",
+        "user",
+    )
 
     fieldsets = (
-        (_("Avatar"), {"fields": ("display_avatar", "avatar", )}),
-        (_("Contact Information"), {"fields": ("user_name", "user", "city", "country", )}),
+        (
+            _("Avatar"),
+            {
+                "fields": (
+                    "display_avatar",
+                    "avatar",
+                )
+            },
+        ),
+        (
+            _("Contact Information"),
+            {
+                "fields": (
+                    "user_name",
+                    "user",
+                    "city",
+                    "country",
+                )
+            },
+        ),
     )
 
     def user_name(self, obj):

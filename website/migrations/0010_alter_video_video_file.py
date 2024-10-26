@@ -7,13 +7,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('website', '0009_alter_narration_audio'),
+        ("website", "0009_alter_narration_audio"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='video',
-            name='video_file',
-            field=models.FileField(upload_to='videos/', validators=[website.utils.validators.validate_video_extension, website.utils.validators.validate_video_size]),
+            model_name="video",
+            name="video_file",
+            field=models.FileField(
+                upload_to="videos/",
+                validators=[
+                    website.utils.validators.validate_video_extension,
+                    website.utils.validators.validate_video_size,
+                ],
+            ),
         ),
     ]

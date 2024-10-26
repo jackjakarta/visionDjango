@@ -9,7 +9,7 @@ from users.utils.constants import ACTIVATION_AVAILABILITY
 
 def send_activation_email(user):
     domain = Site.objects.get_current().domain
-    url = reverse("users:activation:activate", args=(user.activation.token, ))
+    url = reverse("users:activation:activate", args=(user.activation.token,))
     activation_url = f"https://{domain}{url}"
     print(activation_url)
 
@@ -26,7 +26,7 @@ def send_activation_email(user):
         subject="Your account has been created.",
         body=content,
         from_email=settings.EMAIL_HOST_USER,
-        to=[user.email]
+        to=[user.email],
     )
 
     mail.content_subtype = "html"

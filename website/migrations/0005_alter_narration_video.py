@@ -7,13 +7,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('website', '0004_alter_video_video_file'),
+        ("website", "0004_alter_video_video_file"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='narration',
-            name='video',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='videos', related_query_name='video', to='website.video'),
+            model_name="narration",
+            name="video",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="videos",
+                related_query_name="video",
+                to="website.video",
+            ),
         ),
     ]

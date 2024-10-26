@@ -7,13 +7,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('website', '0008_alter_narration_audio'),
+        ("website", "0008_alter_narration_audio"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='narration',
-            name='audio',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='audios', related_query_name='audio', to='website.audio'),
+            model_name="narration",
+            name="audio",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="audios",
+                related_query_name="audio",
+                to="website.audio",
+            ),
         ),
     ]

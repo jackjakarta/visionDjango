@@ -46,7 +46,7 @@ class VideoAnalyser:
             {
                 "role": "system",
                 "content": "You are an AI vision model that generates voice-overs based by analyzing the frames of the video which are "
-                           "provided to you as images. You follow instructions very strictly.",
+                "provided to you as images. You follow instructions very strictly.",
             },
             {
                 "role": "user",
@@ -54,12 +54,12 @@ class VideoAnalyser:
                     {
                         "type": "text",
                         "text": "As a professional scriptwriter, you are tasked with creating a compelling voiceover script for a video. "
-                                "Follow these steps:\n\n1. You are to analyse the video frames provided.\n2. Create the voiceover based "
-                                "on the content and length of the video.\n\nPlease only give me the voiceover in plain text without any "
-                                f"other instructions. The video runs for {video_duration:.2f} seconds. The desired tone for the voiceover "
-                                "should be casual, like one used in a youtube video unless instructed otherwise. Please refer to the provided "
-                                f"custom instructions for additional guidance. Custom Instructions: {self.custom_prompt}\n\nExample "
-                                f"Voiceover Script:\n\n{EXAMPLE_VOICEOVER}\n",
+                        "Follow these steps:\n\n1. You are to analyse the video frames provided.\n2. Create the voiceover based "
+                        "on the content and length of the video.\n\nPlease only give me the voiceover in plain text without any "
+                        f"other instructions. The video runs for {video_duration:.2f} seconds. The desired tone for the voiceover "
+                        "should be casual, like one used in a youtube video unless instructed otherwise. Please refer to the provided "
+                        f"custom instructions for additional guidance. Custom Instructions: {self.custom_prompt}\n\nExample "
+                        f"Voiceover Script:\n\n{EXAMPLE_VOICEOVER}\n",
                     },
                     *[
                         {
@@ -67,11 +67,12 @@ class VideoAnalyser:
                             "image_url": {
                                 "url": f"data:image/jpeg;base64,{frame}",
                                 "detail": config("VISION_DETAIL", default="low"),
-                            }
-                        } for frame in self.base64frames[0::50]
+                            },
+                        }
+                        for frame in self.base64frames[0::50]
                     ],
-                ]
-            }
+                ],
+            },
         ]
 
         debug_print = prompt[1].get("content")[0]
@@ -82,8 +83,12 @@ class VideoAnalyser:
             "model": config("VISION_MODEL", default="gpt-4-turbo"),
             "max_tokens": config("MODEL_MAX_TOKENS", default=1024, cast=int),
             "temperature": config("MODEL_TEMPERATURE", default=0.8, cast=float),
-            "frequency_penalty": config("MODEL_FREQUENCY_PENALTY", default=0.4, cast=float),
-            "presence_penalty": config("MODEL_PRESENCE_PENALTY", default=0.4, cast=float),
+            "frequency_penalty": config(
+                "MODEL_FREQUENCY_PENALTY", default=0.4, cast=float
+            ),
+            "presence_penalty": config(
+                "MODEL_PRESENCE_PENALTY", default=0.4, cast=float
+            ),
             "top_p": config("MODEL_TOP_P", default=1, cast=float),
         }
 

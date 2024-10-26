@@ -10,5 +10,5 @@ def send_email_test(name, message, reply_to):
         subject=subject,
         message=user_message,
         from_email=settings.EMAIL_HOST_USER,
-        recipient_list=["al.termure@gmail.com"]
+        recipient_list=["al.termure@gmail.com"],
     )

@@ -7,26 +7,40 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('website', '0005_alter_narration_video'),
+        ("website", "0005_alter_narration_video"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Audio',
+            name="Audio",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('title', models.CharField(blank=True, max_length=100, null=True)),
-                ('audio_file', models.FileField(upload_to='audio/')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("title", models.CharField(blank=True, max_length=100, null=True)),
+                ("audio_file", models.FileField(upload_to="audio/")),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.AddField(
-            model_name='narration',
-            name='audio',
-            field=models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='audios', related_query_name='audio', to='website.audio'),
+            model_name="narration",
+            name="audio",
+            field=models.OneToOneField(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="audios",
+                related_query_name="audio",
+                to="website.audio",
+            ),
         ),
     ]

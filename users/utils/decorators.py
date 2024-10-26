@@ -12,6 +12,7 @@ def user_is_authenticated(view_func):
             return redirect("users:login")
 
         return view_func(request, *args, **kwargs)
+
     return _wrapped_view
 
 
@@ -28,4 +29,5 @@ def user_is_premium(view_func):
             return redirect("website:send_mail")  # Change redirect later
 
         return view_func(request, *args, **kwargs)
+
     return _wrapped_view

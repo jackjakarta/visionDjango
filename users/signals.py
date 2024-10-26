@@ -27,7 +27,9 @@ def inactivate_user(instance, **kwargs):
     """
     Inactivate user on creation if it's not a social user.
     """
-    is_social_user = hasattr(instance, 'is_social_auth') and instance.is_social_auth is True
+    is_social_user = (
+        hasattr(instance, "is_social_auth") and instance.is_social_auth is True
+    )
 
     if not instance.pk and not is_social_user:
         instance.is_active = False
@@ -41,10 +43,12 @@ def create_activation(sender, instance, created, **kwargs):
     """
     if not isinstance(instance, AuthUser):
         return
-    
-    print('!!! Signal post_save was triggered!')
-    is_social_user = hasattr(instance, 'is_social_auth') and instance.is_social_auth is True
-    
+
+    print("!!! Signal post_save was triggered!")
+    is_social_user = (
+        hasattr(instance, "is_social_auth") and instance.is_social_auth is True
+    )
+
     try:
         with transaction.atomic():
             if created:

@@ -2,7 +2,11 @@ from django.contrib.auth.models import AnonymousUser
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN
+from rest_framework.status import (
+    HTTP_201_CREATED,
+    HTTP_400_BAD_REQUEST,
+    HTTP_403_FORBIDDEN,
+)
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from website.audio.tts import OpenTTS
@@ -15,7 +19,9 @@ class NarrationViewSet(ReadOnlyModelViewSet):
 
     def get_queryset(self):
         if isinstance(self.request.user, AnonymousUser):
-            return Response(data={"error": "403 - Forbidden."}, status=HTTP_403_FORBIDDEN)
+            return Response(
+                data={"error": "403 - Forbidden."}, status=HTTP_403_FORBIDDEN
+            )
 
         return Narration.objects.filter(user_id=self.request.user.id)
 
@@ -28,21 +34,29 @@ def tts_create(request):
     quality = request.data.get("quality")
 
     if not text:
-        return Response(data={"error": "Please provide 'text' argument in the request."}, status=HTTP_400_BAD_REQUEST)
+        return Response(
+            data={"error": "Please provide 'text' argument in the request."},
+            status=HTTP_400_BAD_REQUEST,
+        )
 
-    if voice not in ["alloy", "echo", "fable", "onyx", "nova", "shimmer"] and voice is not None:
+    if (
+        voice not in ["alloy", "echo", "fable", "onyx", "nova", "shimmer"]
+        and voice is not None
+    ):
         return Response(
             data={
                 "error": "Voice doesn't exist. Please choose from following voices: 'alloy', 'echo', 'fable', 'onyx', "
-                         "'nova', 'shimmer'",
+                "'nova', 'shimmer'",
             },
-            status=HTTP_400_BAD_REQUEST
+            status=HTTP_400_BAD_REQUEST,
         )
 
     if quality not in ["standard", "hd"] and quality is not None:
         return Response(
-            data={"error": "Wrong 'quality' parameter. Please choose between 'standard' and 'hd'."},
-            status=HTTP_400_BAD_REQUEST
+            data={
+                "error": "Wrong 'quality' parameter. Please choose between 'standard' and 'hd'."
+            },
+            status=HTTP_400_BAD_REQUEST,
         )
 
     serializer = TTSSerializer(
@@ -61,7 +75,7 @@ def tts_create(request):
         tts = OpenTTS(
             text=validated_text,
             voice=validated_voice,
-            model="tts-1-hd" if validated_quality == "hd" else "tts-1"
+            model="tts-1-hd" if validated_quality == "hd" else "tts-1",
         )
         audio_obj = tts.speech_for_api()
 
@@ -72,7 +86,7 @@ def tts_create(request):
                 "text": validated_text,
                 "file": audio_obj.audio_file.url,
             },
-            status=HTTP_201_CREATED
+            status=HTTP_201_CREATED,
         )
     else:
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
