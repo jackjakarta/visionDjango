@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.shortcuts import render, redirect, get_object_or_404, Http404
+from django.shortcuts import Http404, get_object_or_404, redirect, render
 from libgravatar import Gravatar
 
 from users.models import Profile

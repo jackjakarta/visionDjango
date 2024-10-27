@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 from vision_app.models import CustomModel
+
 from .utils.validators import validate_video_extension, validate_video_size
 
 AuthUser = get_user_model()

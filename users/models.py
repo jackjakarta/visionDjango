@@ -8,6 +8,7 @@ from rest_framework_api_key.models import AbstractAPIKey
 
 from vision_app.models import CustomModel
 from website.utils.constants import COUNTRY_CHOICES
+
 from .managers import AuthUserManager
 from .utils.constants import ACTIVATION_AVAILABILITY
 

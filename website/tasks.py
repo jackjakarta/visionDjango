@@ -1,4 +1,4 @@
-from celery import shared_task, current_task
+from celery import current_task, shared_task
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 

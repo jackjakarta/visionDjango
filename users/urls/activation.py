@@ -1,4 +1,5 @@
 from django.urls import path
+
 from users.views.activation import activate_user, reset_token
 
 app_name = "activation"

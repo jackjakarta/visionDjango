@@ -1,6 +1,6 @@
-from django.urls import path, include
+from django.urls import include, path
 
-from users.views import login_user, logout_user, register_view, get_api_key
+from users.views import get_api_key, login_user, logout_user, register_view
 from users.views.profile import user_narration
 
 app_name = "users"

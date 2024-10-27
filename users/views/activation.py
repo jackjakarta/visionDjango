@@ -1,11 +1,11 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
+from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.decorators import decorator_from_middleware
 
 from users.forms import PasswordForm
 from users.middlewares.activation_middleware import ActivationMiddleware
-from users.models import Activation, AVAILABILITY
+from users.models import AVAILABILITY, Activation
 from users.utils.email import send_activation_email
 
 

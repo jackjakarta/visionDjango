@@ -1,8 +1,7 @@
 import typing
 
 from django.http import HttpRequest
-from rest_framework import authentication
-from rest_framework import exceptions
+from rest_framework import authentication, exceptions
 from rest_framework_api_key.permissions import BaseHasAPIKey
 
 from users.models import UserAPIKey

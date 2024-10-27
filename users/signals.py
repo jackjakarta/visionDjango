@@ -1,10 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.db import transaction
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
-from .models import Activation
-from .models import Profile
+from .models import Activation, Profile
 from .utils.email import send_activation_email
 
 AuthUser = get_user_model()
