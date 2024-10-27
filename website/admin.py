@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Audio, Video, Narration
+
+from .models import Audio, Narration, Video
 
 
 @admin.register(Audio)

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from users.views.profile import user_profile, user_api_key
+from users.views.profile import user_api_key, user_profile
 
 app_name = "profile"
 

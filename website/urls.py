@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import home_view, vision_view, tts_view, send_email_view, get_vision_results
+from .views import get_vision_results, home_view, send_email_view, tts_view, vision_view
 
 app_name = "website"
 

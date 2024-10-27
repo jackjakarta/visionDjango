@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from website.models import Narration, Video, Audio
+from website.models import Audio, Narration, Video
 
 AuthUser = get_user_model()
 

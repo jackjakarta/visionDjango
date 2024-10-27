@@ -1,5 +1,5 @@
 from decouple import config
-from openai import OpenAI, BadRequestError
+from openai import BadRequestError, OpenAI
 
 from website.utils import image_to_base64
 
